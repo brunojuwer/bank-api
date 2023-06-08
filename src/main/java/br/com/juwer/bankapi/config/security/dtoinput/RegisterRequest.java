@@ -1,8 +1,7 @@
 package br.com.juwer.bankapi.config.security.dtoinput;
 
 public record RegisterRequest(
-        String firstname,
-        String lastname,
+        String fullName,
         String email,
         String password
     ) {

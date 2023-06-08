@@ -3,7 +3,6 @@ package br.com.juwer.bankapi.config.security;
 import br.com.juwer.bankapi.config.security.dto.AuthenticationResponse;
 import br.com.juwer.bankapi.config.security.dtoinput.AuthenticationRequest;
 import br.com.juwer.bankapi.config.security.dtoinput.RegisterRequest;
-import br.com.juwer.bankapi.domain.model.Role;
 import br.com.juwer.bankapi.domain.model.User;
 import br.com.juwer.bankapi.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,11 +23,9 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
-                .firstName(request.firstname())
-                .lastName(request.lastname())
+                .fullName(request.fullName())
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
-                .role(Role.USER)
                 .build();
 
         userRepository.save(user);

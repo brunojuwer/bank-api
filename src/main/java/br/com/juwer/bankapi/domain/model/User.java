@@ -21,19 +21,16 @@ import java.util.List;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "_user_sequence")
     private Long id;
-    private String firstName;
-    private String lastName;
+    private String fullName;
     private String email;
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority("user"));
     }
 
     @Override
