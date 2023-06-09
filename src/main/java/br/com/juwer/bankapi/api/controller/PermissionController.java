@@ -8,6 +8,7 @@ import br.com.juwer.bankapi.domain.model.Permission;
 import br.com.juwer.bankapi.domain.repository.PermissionRepository;
 import br.com.juwer.bankapi.domain.service.PermissionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,9 +34,25 @@ public class PermissionController {
         return permissionAssembler.toModel(permission);
     }
 
+    @PutMapping("/{permissionId}")
+    public PermissionDTO update(
+        @PathVariable Long permissionId,
+        @RequestBody PermissionDTOInput permissionDTOInput
+    ) {
+        Permission permissionWithNewData = permissionDisassembler.toDomainModel(permissionDTOInput);
+        Permission permission = permissionService.findPermissionById(permissionId);
+        return permissionAssembler.toModel(permissionService.update(permission, permissionWithNewData));
+    }
+
     @PostMapping
     public PermissionDTO create(@RequestBody PermissionDTOInput permissionDto) {
         Permission permission = permissionDisassembler.toDomainModel(permissionDto);
         return permissionAssembler.toModel(permissionService.save(permission));
+    }
+
+    @DeleteMapping("/{permissionId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long permissionId) {
+        permissionService.delete(permissionId);
     }
 }
