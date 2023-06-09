@@ -4,6 +4,8 @@ import br.com.juwer.bankapi.api.dto.output.UserDTO;
 import br.com.juwer.bankapi.domain.model.User;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class UserAssembler {
 
@@ -14,5 +16,11 @@ public class UserAssembler {
                 user.getEmail(),
                 user.getGroups()
         );
+    }
+
+    public List<UserDTO> toColletionModel(List<User> users) {
+        return users.stream()
+                .map(this::toModel)
+                .toList();
     }
 }

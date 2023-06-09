@@ -1,4 +1,7 @@
 package br.com.juwer.bankapi.api.dto.input;
 
-public class UserDTOInput {
-}
+public record UserDTOInput(
+        String fullName,
+        String email,
+        String password
+) {}

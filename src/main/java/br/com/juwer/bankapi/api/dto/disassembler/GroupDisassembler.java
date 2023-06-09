@@ -25,7 +25,7 @@ public class GroupDisassembler {
 
     public Set<Permission> toColletionDomainModel(Set<Long> permissionDTOS) {
         return permissionDTOS.stream()
-                .map(permissionService::findPermissionById)
+                .map(this.permissionService::findPermissionById)
                 .collect(Collectors.toSet());
     }
 }
