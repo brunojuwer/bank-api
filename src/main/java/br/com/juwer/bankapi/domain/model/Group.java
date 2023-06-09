@@ -13,17 +13,18 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "_group")
 public class Group {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "group_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "_group_sequence")
     private Long id;
 
     @Column(nullable = false)
     private String name;
 
     @ManyToMany
-    @JoinTable(name = "group_permission",
+    @JoinTable(name = "_group_permission",
     joinColumns = @JoinColumn(name = "group_id"),
     inverseJoinColumns = @JoinColumn(name = "permission_id"))
     private Set<Permission> permissions = new HashSet<>();
