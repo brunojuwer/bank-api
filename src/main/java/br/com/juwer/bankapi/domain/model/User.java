@@ -35,6 +35,9 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    private Address address;
 
     @ManyToMany
     @JoinTable(name = "_user_group",
