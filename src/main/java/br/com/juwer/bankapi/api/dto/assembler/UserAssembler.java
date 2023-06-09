@@ -13,8 +13,7 @@ public class UserAssembler {
         return new UserDTO(
                 user.getId(),
                 user.getFullName(),
-                user.getEmail(),
-                user.getGroups()
+                user.getEmail()
         );
     }
 
