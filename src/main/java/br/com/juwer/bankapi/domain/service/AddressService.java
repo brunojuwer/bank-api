@@ -17,4 +17,17 @@ public class AddressService {
         address.getUser().setAddress(address);
         return addressRepository.save(address);
     }
+
+    @Transactional
+    public Address update(Address address) {
+        Address currentAddress = address.getUser().getAddress();
+
+        currentAddress.setStreet(address.getStreet());
+        currentAddress.setCity(address.getCity());
+        currentAddress.setState(address.getState());
+        currentAddress.setPostalCode(address.getPostalCode());
+        currentAddress.setCountry(address.getCountry());
+
+        return currentAddress;
+    }
 }

@@ -35,4 +35,11 @@ public class UserAddressController {
         Address address = addressDisassembler.toDomainModel(addressDTOInput, user);
         return addressAssembler.toModel(addressService.save(address));
     }
+
+    @PutMapping
+    public AddressDTO update(@PathVariable Long userId, @RequestBody AddressDTOInput addressDTOInput) {
+        User user = userService.findUserById(userId);
+        Address newAddress = addressDisassembler.toDomainModel(addressDTOInput, user);
+        return  addressAssembler.toModel(addressService.update(newAddress));
+    }
 }
