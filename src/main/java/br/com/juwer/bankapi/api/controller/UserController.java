@@ -8,6 +8,7 @@ import br.com.juwer.bankapi.api.dto.output.UserDTO;
 import br.com.juwer.bankapi.domain.model.User;
 import br.com.juwer.bankapi.domain.repository.UserRepository;
 import br.com.juwer.bankapi.domain.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class UserController {
     }
 
     @PostMapping
-    public UserDTO create(@RequestBody UserDTOInput userDTOInput) {
+    public UserDTO create(@Valid @RequestBody UserDTOInput userDTOInput) {
         User user = userDisassembler.toDomainModel(userDTOInput);
         return userAssembler.toModel(userService.save(user));
     }
@@ -45,7 +46,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updatePassword(
         @PathVariable Long userId,
-        @RequestBody UserDTOPassword userDTOPassword
+        @Valid @RequestBody UserDTOPassword userDTOPassword
     ){
         User user = userService.findUserById(userId);
         userService.updatePassword(user, userDTOPassword);
