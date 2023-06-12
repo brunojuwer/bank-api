@@ -7,6 +7,7 @@ import br.com.juwer.bankapi.api.dto.output.PermissionDTO;
 import br.com.juwer.bankapi.domain.model.Permission;
 import br.com.juwer.bankapi.domain.repository.PermissionRepository;
 import br.com.juwer.bankapi.domain.service.PermissionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class PermissionController {
     @PutMapping("/{permissionId}")
     public PermissionDTO update(
         @PathVariable Long permissionId,
-        @RequestBody PermissionDTOInput permissionDTOInput
+        @Valid @RequestBody PermissionDTOInput permissionDTOInput
     ) {
         Permission permissionWithNewData = permissionDisassembler.toDomainModel(permissionDTOInput);
         Permission permission = permissionService.findPermissionById(permissionId);
@@ -45,7 +46,7 @@ public class PermissionController {
     }
 
     @PostMapping
-    public PermissionDTO create(@RequestBody PermissionDTOInput permissionDto) {
+    public PermissionDTO create(@Valid @RequestBody PermissionDTOInput permissionDto) {
         Permission permission = permissionDisassembler.toDomainModel(permissionDto);
         return permissionAssembler.toModel(permissionService.save(permission));
     }

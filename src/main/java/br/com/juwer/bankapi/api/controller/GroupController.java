@@ -7,6 +7,7 @@ import br.com.juwer.bankapi.api.dto.output.GroupDTO;
 import br.com.juwer.bankapi.domain.model.Group;
 import br.com.juwer.bankapi.domain.repository.GroupRespository;
 import br.com.juwer.bankapi.domain.service.GroupService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class GroupController {
     }
 
     @PostMapping
-    public GroupDTO create(@RequestBody GroupDTOInput groupDTOInput){
+    public GroupDTO create(@Valid @RequestBody GroupDTOInput groupDTOInput){
         Group group = groupDisassembler.toDomainModel(groupDTOInput);
         return groupAssembler.toModel(groupService.save(group));
     }
@@ -42,7 +43,7 @@ public class GroupController {
     @PutMapping("/{groupId}")
     public GroupDTO update(
         @PathVariable Long groupId,
-        @RequestBody GroupDTOInput groupDTOInput
+        @Valid @RequestBody GroupDTOInput groupDTOInput
     ) {
         Group group = groupService.findGroupById(groupId);
         Group groupWithNewData = groupDisassembler.toDomainModel(groupDTOInput);

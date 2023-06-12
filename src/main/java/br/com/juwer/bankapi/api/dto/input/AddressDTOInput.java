@@ -1,9 +1,11 @@
 package br.com.juwer.bankapi.api.dto.input;
 
+import jakarta.validation.constraints.NotBlank;
+
 public record AddressDTOInput(
-      String street,
-      String city,
-      String state,
-      String postalCode,
-      String country
+      @NotBlank String street,
+      @NotBlank String city,
+      @NotBlank String state,
+      @NotBlank String postalCode,
+      @NotBlank String country
 ) {}
