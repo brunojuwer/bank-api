@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5434/BANKAPI_TEST
+    username: postgres
+    password: docker
+    hikari:
+      maximum-pool-size: 1
+  flyway:
+    locations: classpath:db/migration
+

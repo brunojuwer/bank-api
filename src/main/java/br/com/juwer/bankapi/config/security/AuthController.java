@@ -2,8 +2,8 @@ package br.com.juwer.bankapi.config.security;
 
 import br.com.juwer.bankapi.config.security.dto.AuthenticationResponse;
 import br.com.juwer.bankapi.config.security.dtoinput.AuthenticationRequest;
-import br.com.juwer.bankapi.config.security.dtoinput.RegisterRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,11 +17,10 @@ public class AuthController {
 
     private final AuthenticationService authenticationService;
 
+    @Deprecated
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(
-            @RequestBody RegisterRequest request
-    ) {
-        return ResponseEntity.ok(authenticationService.register(request));
+    public ResponseEntity<AuthenticationResponse> register() {
+        return ResponseEntity.status(HttpStatus.GONE).build();
     }
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(
