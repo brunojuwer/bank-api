@@ -15,7 +15,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 
-@TestPropertySource("/application-test.yml")
+@TestPropertySource("/application-test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class BankApiApplicationTests {
 
@@ -36,7 +36,7 @@ class BankApiApplicationTests {
 	public void setUp(){
 		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
 		RestAssured.basePath = "/auth";
-		RestAssured.port = port;
+		RestAssured.port = this.port;
 
 		jsonRegisterNewUser = ResourceUtil.getContentFromResource(
 				"/json/newUserRegister.json");
@@ -50,7 +50,7 @@ class BankApiApplicationTests {
 	private void prepareData() {
 		User user = new User();
 		user.setEmail("bruno@email.com");
-		user.setPassword("qwe@123");
+		user.setPassword("$2a$10$6lDvxTx9FPDD86YOPcMDmO5PRQW3HfBU/mu6YbpX5INzsmxAQldx2");
 		user.setFullName("Bruno Juwer");
 		userRepository.save(user);
 	}
@@ -84,6 +84,4 @@ class BankApiApplicationTests {
 					.body("userId", Matchers.equalTo(1))
 					.statusCode(HttpStatus.OK.value());
 	}
-
-
 }
