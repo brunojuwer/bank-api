@@ -26,6 +26,7 @@ public class DataBaseCleaner {
 
             checkTestDatabase();
             tryToClearTables();
+            tryToRestartSequences();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -33,10 +34,39 @@ public class DataBaseCleaner {
         }
     }
 
+    private void tryToRestartSequences() throws SQLException {
+        List<String> sequenceNames = getSequencesName();
+        resetSequence(sequenceNames);
+    }
+
+    private void resetSequence(List<String> sequenceNames) throws SQLException {
+        Statement statement = connection.createStatement();
+        sequenceNames.forEach(seq -> {
+            try {
+                statement.addBatch(sql("ALTER SEQUENCE " + seq + " RESTART WITH 1;"));
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        statement.executeBatch();
+    }
+
+    private List<String> getSequencesName() throws SQLException {
+        List<String> sequenceNames = new ArrayList<>();
+
+        DatabaseMetaData metaData = connection.getMetaData();
+        ResultSet rs = metaData.getTables(connection.getCatalog(), null, null, new String[] { "SEQUENCE" });
+
+        while (rs.next()) {
+            sequenceNames.add(rs.getString("TABLE_NAME"));
+        }
+        return sequenceNames;
+    }
+
     private void checkTestDatabase() throws SQLException {
         String catalog = connection.getCatalog();
 
-        if (catalog == null || !catalog.endsWith("TEST")) {
+        if (catalog == null || !catalog.endsWith("test")) {
             throw new RuntimeException(
                     "Cannot clear database tables because '" + catalog + "' is not a test database (suffix 'test' not found).");
         }
@@ -72,9 +102,9 @@ public class DataBaseCleaner {
     private Statement buildSqlStatement(List<String> tableNames) throws SQLException {
         Statement statement = connection.createStatement();
 
-        statement.addBatch(sql("SET FOREIGN_KEY_CHECKS = 0"));
+        statement.addBatch(sql("SET session_replication_role = 'replica';"));
         addTruncateSatements(tableNames, statement);
-        statement.addBatch(sql("SET FOREIGN_KEY_CHECKS = 1"));
+        statement.addBatch(sql("SET session_replication_role = 'origin';"));
 
         return statement;
     }
@@ -82,7 +112,7 @@ public class DataBaseCleaner {
     private void addTruncateSatements(List<String> tableNames, Statement statement) {
         tableNames.forEach(tableName -> {
             try {
-                statement.addBatch(sql("TRUNCATE TABLE " + tableName));
+                statement.addBatch(sql("TRUNCATE TABLE " + tableName + " CASCADE"));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
