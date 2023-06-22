@@ -7,6 +7,6 @@ public class GroupNotFoundException extends RuntimeException {
     }
 
     public GroupNotFoundException(Long groupId) {
-        this(String.format("Group with Id %d not found", groupId));
+        this(String.format("Group with id %d not found", groupId));
     }
 }

@@ -1,6 +1,7 @@
 package br.com.juwer.bankapi.domain.service;
 
 import br.com.juwer.bankapi.domain.model.Address;
+import br.com.juwer.bankapi.domain.model.User;
 import br.com.juwer.bankapi.domain.repository.AddressRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,14 +14,15 @@ public class AddressService {
     private final AddressRepository addressRepository;
 
     @Transactional
-    public Address save(Address address) {
-        address.getUser().setAddress(address);
-        return addressRepository.save(address);
+    public Address save(Address address, User user) {
+        Address savedAddress = addressRepository.save(address);
+        user.setAddress(savedAddress);
+        return savedAddress;
     }
 
     @Transactional
-    public Address update(Address address) {
-        Address currentAddress = address.getUser().getAddress();
+    public Address update(Address address, Long userId) {
+        Address currentAddress = addressRepository.findAddressByUserId(userId);
 
         currentAddress.setStreet(address.getStreet());
         currentAddress.setCity(address.getCity());
@@ -28,6 +30,6 @@ public class AddressService {
         currentAddress.setPostalCode(address.getPostalCode());
         currentAddress.setCountry(address.getCountry());
 
-        return currentAddress;
+        return addressRepository.save(currentAddress);
     }
 }

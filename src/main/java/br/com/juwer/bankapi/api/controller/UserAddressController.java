@@ -35,8 +35,8 @@ public class UserAddressController {
             @Valid @RequestBody AddressDTOInput addressDTOInput
     ) {
         User user = userService.findUserById(userId);
-        Address address = addressDisassembler.toDomainModel(addressDTOInput, user);
-        return addressAssembler.toModel(addressService.save(address));
+        Address address = addressDisassembler.toDomainModel(addressDTOInput);
+        return addressAssembler.toModel(addressService.save(address, user));
     }
 
     @PutMapping
@@ -45,7 +45,7 @@ public class UserAddressController {
             @Valid @RequestBody AddressDTOInput addressDTOInput
     ) {
         User user = userService.findUserById(userId);
-        Address newAddress = addressDisassembler.toDomainModel(addressDTOInput, user);
-        return  addressAssembler.toModel(addressService.update(newAddress));
+        Address newAddress = addressDisassembler.toDomainModel(addressDTOInput);
+        return  addressAssembler.toModel(addressService.update(newAddress, user.getId()));
     }
 }

@@ -20,7 +20,7 @@ public class UserService {
     @Transactional
     public User save(User user) {
         user.setPassword(encoder.encode(user.getPassword()));
-        return  userRepository.save(user);
+        return userRepository.save(user);
     }
 
     @Transactional
@@ -31,8 +31,8 @@ public class UserService {
         if(!currentPasswordMatches) {
             throw new CurrentPasswordDoesNotMatchException("Your current password does not match");
         }
-        user.setPassword(userDTOPassword.newPassword());
-        this.save(user);
+        user.setPassword(encoder.encode(userDTOPassword.newPassword()));
+        userRepository.save(user);
     }
 
     @Transactional
