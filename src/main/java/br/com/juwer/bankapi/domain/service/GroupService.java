@@ -22,7 +22,7 @@ public class GroupService {
     public Group update(Group group, Group groupWithNewData) {
         group.setName(groupWithNewData.getName());
         group.setPermissions(groupWithNewData.getPermissions());
-        return group;
+        return groupRespository.save(group);
     }
 
     @Transactional

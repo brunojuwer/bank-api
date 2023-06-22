@@ -22,11 +22,12 @@ public class PermissionService {
     public Permission update(Permission permission, Permission permissionWithNewData) {
         permission.setName(permissionWithNewData.getName());
         permission.setDescription(permissionWithNewData.getDescription());
-        return permission;
+        return  permissionRepository.save(permission);
     }
 
     @Transactional
     public void delete(Long permissionId) {
+        this.findPermissionById(permissionId);
         permissionRepository.deleteById(permissionId);
     }
 

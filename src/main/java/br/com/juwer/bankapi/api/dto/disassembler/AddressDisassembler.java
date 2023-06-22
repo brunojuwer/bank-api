@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AddressDisassembler {
 
-    public Address toDomainModel(AddressDTOInput addressDTOInput, User user) {
+    public Address toDomainModel(AddressDTOInput addressDTOInput) {
         return new Address(
                 null,
                 addressDTOInput.street(),
@@ -16,7 +16,7 @@ public class AddressDisassembler {
                 addressDTOInput.state(),
                 addressDTOInput.postalCode(),
                 addressDTOInput.country(),
-                user
+                null
                 );
     }
 }
