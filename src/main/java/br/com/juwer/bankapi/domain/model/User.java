@@ -6,10 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Builder
 @Data
@@ -41,6 +38,17 @@ public class User implements UserDetails {
     joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "group_id"))
     private Set<Group> groups = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "_user_account",
+    joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "account_id"))
+    private List<Account> accounts;
+
+
+    public void addNewAccount(Account account) {
+        this.accounts = new ArrayList<>(Collections.singletonList(account));
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
