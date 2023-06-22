@@ -85,7 +85,7 @@ class UserServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
         Throwable exception = Assertions.catchThrowable(() -> userService.delete(userId));
 
-        assertEquals("User not found", exception.getMessage());
+        assertEquals("User with id 1 not found", exception.getMessage());
         verify(userRepository, never()).deleteById(userId);
     }
 
@@ -96,7 +96,7 @@ class UserServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
         Throwable exception = Assertions.catchThrowable(() -> userService.findUserById(userId));
 
-        assertEquals("User not found", exception.getMessage());
+        assertEquals("User with id 1 not found", exception.getMessage());
     }
 
     private static User generateSimpleUser() {
