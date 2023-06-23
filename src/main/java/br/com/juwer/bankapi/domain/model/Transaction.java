@@ -23,8 +23,8 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private Operation operation;
 
-    @Column(name = "created_at")
     @CreationTimestamp
+    @Column(name = "created_at")
     private OffsetDateTime createdAt;
 
     @Getter
