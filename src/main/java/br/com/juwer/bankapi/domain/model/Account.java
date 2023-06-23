@@ -1,5 +1,7 @@
 package br.com.juwer.bankapi.domain.model;
 
+import br.com.juwer.bankapi.domain.exceptions.InvalidTransactionException;
+import br.com.juwer.bankapi.domain.model.Transaction.Operation;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -36,9 +38,30 @@ public class Account {
     private List<Transaction> transactions = new ArrayList<>();
 
 
-    public void deposit(Transaction transaction) {
-        this.balance = this.balance.add(transaction.getAmmount());
-        this.setTransactions(List.of(transaction));
+    public void depositOrWithDraw(BigDecimal ammount, Operation operation) {
+
+        boolean isValueGreaterThanZero = ammount.compareTo(BigDecimal.ZERO) > 0;
+        boolean isValueLessThanZero = ammount.compareTo(BigDecimal.ZERO) < 0;
+        boolean isADeposit = operation.equals(Operation.DEPOSIT);
+        boolean isAWithDraw = operation.equals(Operation.WITHDRAW);
+
+        if(isValueGreaterThanZero && isADeposit) {
+            this.deposit(ammount);
+        }
+        else if(isValueLessThanZero && isAWithDraw) {
+            this.withDraw(ammount);
+        } else {
+            throw new InvalidTransactionException("Invalid value for a " + operation + " operation");
+        }
+
+    }
+
+    private void withDraw(BigDecimal ammount) {
+        this.balance = this.balance.subtract(ammount);
+    }
+
+    private void deposit(BigDecimal ammount) {
+        this.balance = this.balance.add(ammount);
     }
 
     @Getter

@@ -1,5 +1,6 @@
 package br.com.juwer.bankapi.api.exceptionhandler;
 
+import br.com.juwer.bankapi.domain.exceptions.InvalidTransactionException;
 import br.com.juwer.bankapi.domain.exceptions.UserNotFoundException;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +54,19 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         String detail = ex.getMessage();
         HttpStatus status = HttpStatus.NOT_FOUND;
         ProblemType problemType = ProblemType.RESOURCE_NOT_FOUND;
+
+        Problem problem = createProblemBuilder(
+                status, problemType, detail, detail, OffsetDateTime.now())
+                .build();
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(InvalidTransactionException.class)
+    public ResponseEntity<?> handleInvalidTransactionException(InvalidTransactionException ex, WebRequest request) {
+        String detail = ex.getMessage();
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ProblemType problemType = ProblemType.INVALID_DATA;
 
         Problem problem = createProblemBuilder(
                 status, problemType, detail, detail, OffsetDateTime.now())
