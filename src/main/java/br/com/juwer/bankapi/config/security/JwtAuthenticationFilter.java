@@ -45,7 +45,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        try {
             jwt = authHeader.replace("Bearer ", "");
             userEmail = jwtService.extractUsername(jwt);
 
@@ -63,31 +62,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
-        } catch (ExpiredJwtException ex) {
-            this.sendTokenExpiredException(ex, response);
-        }
         filterChain.doFilter(request, response);
-    }
-
-    private void sendTokenExpiredException(ExpiredJwtException ex, HttpServletResponse response) throws IOException {
-        HttpStatus status = HttpStatus.FORBIDDEN;
-
-        String title = "Token expired";
-
-        FailedToGenerateToken problem = new FailedToGenerateToken(
-                status.value(),
-                title,
-                ex.getMessage()
-        );
-
-        String problemJsonString = new Gson().toJson(problem);
-
-        response.setStatus(status.value());
-        PrintWriter writer = response.getWriter();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        writer.print(problemJsonString);
-        writer.close();
     }
 }
 

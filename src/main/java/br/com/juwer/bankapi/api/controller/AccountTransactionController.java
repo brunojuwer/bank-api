@@ -40,5 +40,4 @@ public class AccountTransactionController {
         Transaction savedTransaction = accountTransactionService.deposit(account, transaction);
         return transactionAssembler.toModel(savedTransaction);
     }
-
 }
