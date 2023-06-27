@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 public record AccountDTO(
-        Long id,
+        String code,
         Type type,
         BigDecimal balance,
         OffsetDateTime createdAt

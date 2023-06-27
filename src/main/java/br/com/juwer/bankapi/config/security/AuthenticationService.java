@@ -2,7 +2,8 @@ package br.com.juwer.bankapi.config.security;
 
 import br.com.juwer.bankapi.config.security.dto.AuthenticationResponse;
 import br.com.juwer.bankapi.config.security.dtoinput.AuthenticationRequest;
-import br.com.juwer.bankapi.domain.repository.UserRepository;
+import br.com.juwer.bankapi.domain.exceptions.AccountNotFoundException;
+import br.com.juwer.bankapi.domain.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,21 +14,21 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(request.email(), request.password())
+            new UsernamePasswordAuthenticationToken(request.code(), request.password())
         );
 
-        var user = userRepository.findByEmail(request.email())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        var account = accountRepository.findByCode(request.code())
+                .orElseThrow(() -> new AccountNotFoundException(request.code()));
 
-        userRepository.save(user);
-        String token = jwtService.generateToken(user);
+//        accountRepository.save(account);
+        String token = jwtService.generateToken(account);
 
-        return new AuthenticationResponse(token, user.getEmail(), user.getId());
+        return new AuthenticationResponse(token, account.getCode());
     }
 }

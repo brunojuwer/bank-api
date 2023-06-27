@@ -1,6 +1,7 @@
 package br.com.juwer.bankapi.config.security;
 
-import br.com.juwer.bankapi.domain.repository.UserRepository;
+import br.com.juwer.bankapi.domain.exceptions.AccountNotFoundException;
+import br.com.juwer.bankapi.domain.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,12 +18,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-    private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return username -> accountRepository.findByCode(username)
+                .orElseThrow(() -> new AccountNotFoundException(username));
     }
 
     @Bean

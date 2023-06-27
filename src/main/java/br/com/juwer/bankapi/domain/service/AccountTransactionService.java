@@ -18,9 +18,9 @@ public class AccountTransactionService {
 
     @Transactional
     public Transaction deposit(Account account, Transaction transaction) {
-       account.depositOrWithDraw(transaction.getAmmount(), transaction.getOperation());
+       account.depositOrWithDraw(transaction.getAmount(), transaction.getOperation());
        Transaction savedTransaction = transactionService.save(transaction);
-       accountRepository.polulateAccountTransactionTable(account.getId(), transaction.getId());
+       accountRepository.populateAccountTransactionTable(account.getCode(), transaction.getId());
        accountService.save(account);
 
        return savedTransaction;

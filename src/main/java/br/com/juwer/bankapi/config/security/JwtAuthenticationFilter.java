@@ -1,14 +1,10 @@
 package br.com.juwer.bankapi.config.security;
 
-import br.com.juwer.bankapi.config.security.dto.FailedToGenerateToken;
-import com.google.gson.Gson;
-import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +15,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @Component
 @RequiredArgsConstructor
@@ -38,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
-        final String userEmail;
+        final String userCode;
 
         if(authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
@@ -46,10 +41,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
             jwt = authHeader.replace("Bearer ", "");
-            userEmail = jwtService.extractUsername(jwt);
+            userCode = jwtService.extractUsername(jwt);
 
-            if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+            if(userCode != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(userCode);
 
                 if(jwtService.isTokenValid(jwt, userDetails)) {
                     var authToken = new UsernamePasswordAuthenticationToken(

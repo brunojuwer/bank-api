@@ -13,12 +13,17 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "transaction")
+@SequenceGenerator(name = "transaction_seq", sequenceName = "transaction_seq", allocationSize = 1)
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaction_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaction_seq")
     private Long id;
-    private BigDecimal ammount;
+
+    @Column(name = "account_code")
+    private String accountCode;
+
+    private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
     private Operation operation;
@@ -32,6 +37,7 @@ public class Transaction {
         DEPOSIT,
         WITHDRAW,
         TRANSFER,
+        APPLICATION,
         PIX
     }
 }

@@ -1,14 +1,13 @@
 package br.com.juwer.bankapi.unit.service;
 
 import br.com.juwer.bankapi.domain.model.Address;
-import br.com.juwer.bankapi.domain.model.User;
+import br.com.juwer.bankapi.domain.model.Customer;
 import br.com.juwer.bankapi.domain.repository.AddressRepository;
 import br.com.juwer.bankapi.domain.service.AddressService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,14 +28,14 @@ class AddressServiceTest {
     void itShouldSaveAnAddressWithSuccess() {
         Address address = createNewAddress();
         Address addressWithId = createNewAddressWithId();
-        User user = generateSimpleUserWithId();
+        Customer customer = generateSimpleUserWithId();
 
         when(addressRepository.save(any())).thenReturn(addressWithId);
-        Address createdAddress = addressService.save(address, user);
+        Address createdAddress = addressService.save(address, customer);
 
         verify(addressRepository).save(address);
         assertNotNull(createdAddress.getId());
-        assertEquals(user.getAddress(), createdAddress);
+        assertEquals(customer.getAddress(), createdAddress);
     }
 
 
@@ -97,11 +96,10 @@ class AddressServiceTest {
                 .build();
     }
 
-    private static User generateSimpleUserWithId() {
-        return User.builder()
+    private static Customer generateSimpleUserWithId() {
+        return Customer.builder()
                 .id(1L)
                 .email("email@email.com")
-                .password("1234")
                 .fullName("Fulano da Silva")
                 .build();
     }

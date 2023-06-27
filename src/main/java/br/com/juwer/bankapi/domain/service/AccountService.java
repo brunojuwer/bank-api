@@ -17,8 +17,8 @@ public class AccountService {
     }
 
 
-    public Account findAccountByOwnIdAndUserId(Long accountId, Long userId) {
-        return repository.findAccountByOwnIdAndUserId(accountId, userId)
-                .orElseThrow(() -> new AccountNotFoundException(accountId));
+    public Account findByCode(String accountCode) {
+        return repository.findByCode(accountCode)
+                .orElseThrow(() -> new AccountNotFoundException(accountCode));
     }
 }

@@ -10,7 +10,8 @@ public class TransactionAssembler {
     public TransactionDTO toModel(Transaction transaction) {
         return new TransactionDTO(
                 transaction.getId(),
-                transaction.getAmmount(),
+                transaction.getAccountCode(),
+                transaction.getAmount(),
                 transaction.getOperation(),
                 transaction.getCreatedAt()
         );

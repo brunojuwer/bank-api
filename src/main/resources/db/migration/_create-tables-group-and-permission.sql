@@ -10,13 +10,13 @@ create table permission (
 );
 
 create sequence _group_sequence as bigint
-increment by 50
+increment by 1
 start with 1
 minvalue 1
 owned by _group.id;
 
 create sequence permission_sequence as bigint
-increment by 50
+increment by 1
 start with 1
 minvalue 1
 owned by permission.id;
@@ -30,11 +30,11 @@ create table _group_permission (
     constraint fk_permission_id foreign key (permission_id) references permission (id)
 );
 
-create table _user_group (
-    user_id bigint not null,
+create table employee_group (
+    emplyoee_id bigint not null,
     group_id bigint not null,
 
-    primary key(user_id, group_id),
-    constraint fk_user_id foreign key (user_id) references _user (id),
+    primary key(emplyoee_id, group_id),
+    constraint fk_empolyee_id foreign key (user_id) references emplyoee (id),
     constraint fk_group_id foreign key (group_id) references _group (id)
 );

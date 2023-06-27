@@ -5,7 +5,7 @@ import br.com.juwer.bankapi.api.dto.disassembler.AddressDisassembler;
 import br.com.juwer.bankapi.api.dto.input.AddressDTOInput;
 import br.com.juwer.bankapi.api.dto.output.AddressDTO;
 import br.com.juwer.bankapi.domain.model.Address;
-import br.com.juwer.bankapi.domain.model.User;
+import br.com.juwer.bankapi.domain.model.Customer;
 import br.com.juwer.bankapi.domain.repository.AddressRepository;
 import br.com.juwer.bankapi.domain.service.AddressService;
 import br.com.juwer.bankapi.domain.service.UserService;
@@ -34,9 +34,9 @@ public class UserAddressController {
             @PathVariable Long userId,
             @Valid @RequestBody AddressDTOInput addressDTOInput
     ) {
-        User user = userService.findUserById(userId);
+        Customer customer = userService.findUserById(userId);
         Address address = addressDisassembler.toDomainModel(addressDTOInput);
-        return addressAssembler.toModel(addressService.save(address, user));
+        return addressAssembler.toModel(addressService.save(address, customer));
     }
 
     @PutMapping
@@ -44,8 +44,8 @@ public class UserAddressController {
             @PathVariable Long userId,
             @Valid @RequestBody AddressDTOInput addressDTOInput
     ) {
-        User user = userService.findUserById(userId);
+        Customer customer = userService.findUserById(userId);
         Address newAddress = addressDisassembler.toDomainModel(addressDTOInput);
-        return  addressAssembler.toModel(addressService.update(newAddress, user.getId()));
+        return  addressAssembler.toModel(addressService.update(newAddress, customer.getId()));
     }
 }

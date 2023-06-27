@@ -42,12 +42,12 @@ public class AccountServiceTest {
     void itShouldGetAnAccountWithSuccess() {
         Account accountWithId = FakeAccountFactory.createAccountWithId();
 
-        when(repository.findAccountByOwnIdAndUserId(accountWithId.getId(), 1L))
+        when(repository.findByCode(accountWithId.getCode()))
                 .thenReturn(Optional.of(accountWithId));
 
-        Account createdAccount = service.findAccountByOwnIdAndUserId(accountWithId.getId(), 1L);
+        Account createdAccount = service.findByCode(accountWithId.getCode());
 
-        verify(repository).findAccountByOwnIdAndUserId(accountWithId.getId(), 1L);
+        verify(repository).findByCode(accountWithId.getCode());
         assertEquals(accountWithId, createdAccount);
     }
 
@@ -55,10 +55,10 @@ public class AccountServiceTest {
     void itShouldThrowAnExceptionWhenGetAnAccountWithNonExistentId() {
         Account accountWithId = FakeAccountFactory.createAccountWithId();
 
-        when(repository.findAccountByOwnIdAndUserId(accountWithId.getId(), 1L))
+        when(repository.findByCode(accountWithId.getCode()))
                 .thenReturn(Optional.empty());
         Throwable exception = catchThrowable(() ->
-                service.findAccountByOwnIdAndUserId(accountWithId.getId(), 1L));
+                service.findByCode(accountWithId.getCode()));
 
         assertEquals("Account with id 1 not found", exception.getMessage());
     }

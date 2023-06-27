@@ -30,7 +30,7 @@ public class SecurityConfiguration {
                         registry
                                 .requestMatchers("/auth/**")
                                 .permitAll()
-                                .requestMatchers(HttpMethod.POST, "/v1/users")
+                                .requestMatchers(HttpMethod.POST, "/api/v1/customers")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
@@ -38,7 +38,6 @@ public class SecurityConfiguration {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class);

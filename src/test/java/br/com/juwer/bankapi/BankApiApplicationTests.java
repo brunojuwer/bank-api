@@ -1,7 +1,7 @@
 package br.com.juwer.bankapi;
 
-import br.com.juwer.bankapi.domain.model.User;
-import br.com.juwer.bankapi.domain.repository.UserRepository;
+import br.com.juwer.bankapi.domain.model.Customer;
+import br.com.juwer.bankapi.domain.repository.CustomerRepository;
 import br.com.juwer.bankapi.utils.DataBaseCleaner;
 import br.com.juwer.bankapi.utils.ResourceUtil;
 import io.restassured.RestAssured;
@@ -21,7 +21,7 @@ class BankApiApplicationTests {
 
 
 	@Autowired
-	private UserRepository userRepository;
+	private CustomerRepository customerRepository;
 
 	@Autowired
 	private DataBaseCleaner dataBaseCleaner;
@@ -48,11 +48,11 @@ class BankApiApplicationTests {
 	}
 
 	private void prepareData() {
-		User user = new User();
-		user.setEmail("bruno@email.com");
-		user.setPassword("$2a$10$6lDvxTx9FPDD86YOPcMDmO5PRQW3HfBU/mu6YbpX5INzsmxAQldx2");
-		user.setFullName("Bruno Juwer");
-		userRepository.save(user);
+		Customer customer = new Customer();
+		customer.setEmail("bruno@email.com");
+//		customer.setPassword("$2a$10$6lDvxTx9FPDD86YOPcMDmO5PRQW3HfBU/mu6YbpX5INzsmxAQldx2");
+		customer.setFullName("Bruno Juwer");
+		customerRepository.save(customer);
 	}
 
 

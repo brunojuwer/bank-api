@@ -8,7 +8,7 @@ import java.time.OffsetDateTime;
 public class FakeTransactionFactory {
     public static Transaction createNewTransaction() {
         return Transaction.builder()
-                .ammount(BigDecimal.valueOf(200.99))
+                .amount(BigDecimal.valueOf(200.99))
                 .operation(Transaction.Operation.DEPOSIT)
                 .build();
     }
@@ -16,7 +16,7 @@ public class FakeTransactionFactory {
     public static Transaction createNewTransactionWithId() {
         return Transaction.builder()
                 .id(1L)
-                .ammount(BigDecimal.valueOf(200.99))
+                .amount(BigDecimal.valueOf(200.99))
                 .operation(Transaction.Operation.DEPOSIT)
                 .createdAt(OffsetDateTime.now())
                 .build();
