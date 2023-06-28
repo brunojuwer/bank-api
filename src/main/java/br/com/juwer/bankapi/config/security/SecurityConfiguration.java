@@ -18,27 +18,29 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
 
     private final JwtAuthenticationFilter filter;
+    private final ExceptionHandlerFilter exceptionHandlerFilter;
     private final AuthenticationProvider authenticationProvider;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(registry ->
-                registry
-                        .requestMatchers("/auth/**")
-                            .permitAll()
-                        .requestMatchers(HttpMethod.POST, "/v1/users")
-                            .permitAll()
-                        .anyRequest()
-                            .authenticated()
-            )
-            .sessionManagement(session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
-            .authenticationProvider(authenticationProvider)
-            .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(registry ->
+                        registry
+                                .requestMatchers("/auth/**")
+                                .permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/customers")
+                                .permitAll()
+                                .anyRequest()
+                                .authenticated()
+                )
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class);
         return http.build();
     }
 }

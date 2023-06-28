@@ -7,17 +7,13 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
-public interface AccountRepository extends JpaRepository<Account, Long> {
-
-    @Query(value = "SELECT a.id, a.type , a.balance, a.created_at FROM _user_account ua " +
-            "JOIN account a ON ua.account_id = a.id " +
-            "JOIN _user u ON u.id = ua.user_id " +
-            "WHERE ua.user_id = :userId AND ua.account_id = :accountId", nativeQuery = true)
-    Optional<Account> findAccountByOwnIdAndUserId(Long accountId, Long userId);
+public interface AccountRepository extends JpaRepository<Account, String> {
 
     @Modifying
-    @Query(value = "INSERT INTO account_transaction (account_id, transaction_id) " +
-            "VALUES (:accountId, :transactionId)",
+    @Query(value = "INSERT INTO account_transaction (account_code, transaction_id) " +
+            "VALUES (:code, :transactionId)",
         nativeQuery = true)
-    void polulateAccountTransactionTable(Long accountId, Long transactionId);
+    void populateAccountTransactionTable(String code, Long transactionId);
+
+    Optional<Account> findByCode(String code);
 }

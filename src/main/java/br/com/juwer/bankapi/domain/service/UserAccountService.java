@@ -1,7 +1,7 @@
 package br.com.juwer.bankapi.domain.service;
 
 import br.com.juwer.bankapi.domain.model.Account;
-import br.com.juwer.bankapi.domain.model.User;
+import br.com.juwer.bankapi.domain.model.Customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,13 +15,13 @@ public class UserAccountService {
 
     @Transactional
     public Account save(Long userId, Account account) {
-        User user = userService.findUserById(userId);
+        Customer customer = userService.findUserById(userId);
         Account savedAccount = accountService.save(account);
-        user.addNewAccount(account);
+//        customer.addNewAccount(account);
         return savedAccount;
     }
 
-    public Account findAccountByOwnIdAndUserId(Long accountId, Long userId){
-        return accountService.findAccountByOwnIdAndUserId(accountId, userId);
+    public Account findAccountByOwnIdAndUserId(String accountCode){
+        return accountService.findByCode(accountCode);
     }
 }

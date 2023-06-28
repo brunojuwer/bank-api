@@ -10,6 +10,7 @@ public class TransactionDisassembler {
     public Transaction toDomainModel(TransactionDTOInput transactionDTOInput){
         return new Transaction(
                 null,
+                null,
                 transactionDTOInput.ammount(),
                 transactionDTOInput.operation(),
                 null

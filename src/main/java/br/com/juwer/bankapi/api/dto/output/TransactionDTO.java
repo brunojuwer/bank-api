@@ -7,7 +7,8 @@ import java.time.OffsetDateTime;
 
 public record TransactionDTO(
         Long transactionId,
-        BigDecimal ammount,
+        String accountCode,
+        BigDecimal amount,
         Operation operation,
         OffsetDateTime createdAt
 ) {}
