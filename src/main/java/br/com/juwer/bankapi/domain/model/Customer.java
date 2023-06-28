@@ -44,9 +44,6 @@ public class Customer {
 
     private String nationality;
 
-    @ManyToMany
-    @JoinTable(name = "customer_address",
-        joinColumns = @JoinColumn(name = "customer_id"),
-         inverseJoinColumns = @JoinColumn(name = "address_id"))
-    private List<Address> address;
+    @Embedded
+    private Address address;
 }

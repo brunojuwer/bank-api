@@ -2,8 +2,6 @@ package br.com.juwer.bankapi.unit.service;
 
 import br.com.juwer.bankapi.domain.model.Address;
 import br.com.juwer.bankapi.domain.model.Customer;
-import br.com.juwer.bankapi.domain.repository.AddressRepository;
-import br.com.juwer.bankapi.domain.service.AddressService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

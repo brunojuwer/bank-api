@@ -44,23 +44,23 @@ public class Account implements UserDetails {
     @Column(name = "last_login_date")
     private OffsetDateTime lastLoginDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "account_transaction",
     joinColumns = @JoinColumn(name = "account_code"),
     inverseJoinColumns = @JoinColumn(name = "transaction_id"))
     private List<Transaction> transactions = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "account_investment",
         joinColumns = @JoinColumn(name = "account_code"),
         inverseJoinColumns = @JoinColumn(name = "investment_id"))
     private List<Investment> investments = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "account_loan",
         joinColumns = @JoinColumn(name = "account_code"),
         inverseJoinColumns = @JoinColumn(name = "loan_id"))

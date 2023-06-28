@@ -1,6 +1,6 @@
 package br.com.juwer.bankapi.domain.exceptions;
 
-public class PermissionNotFoundException extends RuntimeException {
+public class PermissionNotFoundException extends EntityNotFoundException {
     public PermissionNotFoundException(String message) {
         super(message);
     }

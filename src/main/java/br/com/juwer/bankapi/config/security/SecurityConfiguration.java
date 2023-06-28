@@ -30,7 +30,7 @@ public class SecurityConfiguration {
                         registry
                                 .requestMatchers("/auth/**")
                                 .permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/v1/customers")
+                                .requestMatchers(HttpMethod.POST, "/api/v1/accounts")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
