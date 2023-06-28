@@ -1,5 +1,6 @@
-package br.com.juwer.bankapi.config.security;
+package br.com.juwer.bankapi.config.security.filter;
 
+import br.com.juwer.bankapi.config.security.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

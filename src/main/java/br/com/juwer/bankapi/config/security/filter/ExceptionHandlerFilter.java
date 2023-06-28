@@ -1,4 +1,4 @@
-package br.com.juwer.bankapi.config.security;
+package br.com.juwer.bankapi.config.security.filter;
 
 import br.com.juwer.bankapi.api.exceptionhandler.Problem;
 import com.fasterxml.jackson.core.JsonProcessingException;

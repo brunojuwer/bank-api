@@ -1,12 +1,12 @@
 package br.com.juwer.bankapi.domain.exceptions;
 
-public class UserNotFoundException extends RuntimeException {
+public class CustomerNotFoundException extends EntityNotFoundException {
 
-    public UserNotFoundException(String message) {
+    public CustomerNotFoundException(String message) {
         super(message);
     }
 
-    public UserNotFoundException(Long userId) {
-        this(String.format("User with id %d not found", userId));
+    public CustomerNotFoundException(Long userId) {
+        this(String.format("Customer with id %d not found", userId));
     }
 }

@@ -1,13 +1,13 @@
 package br.com.juwer.bankapi.unit.service;
 
 import br.com.juwer.bankapi.domain.exceptions.AccountNotFoundException;
-import br.com.juwer.bankapi.domain.exceptions.UserNotFoundException;
+import br.com.juwer.bankapi.domain.exceptions.CustomerNotFoundException;
 import br.com.juwer.bankapi.domain.model.Account;
 import br.com.juwer.bankapi.domain.model.Customer;
 import br.com.juwer.bankapi.domain.model.Transaction;
 import br.com.juwer.bankapi.domain.service.AccountService;
 import br.com.juwer.bankapi.domain.service.UserAccountService;
-import br.com.juwer.bankapi.domain.service.UserService;
+import br.com.juwer.bankapi.domain.service.CustomerService;
 import br.com.juwer.bankapi.utils.FakeAccountFactory;
 import br.com.juwer.bankapi.utils.FakeTransactionFactory;
 import br.com.juwer.bankapi.utils.FakeUserFactory;
@@ -32,7 +32,7 @@ public class CustomerAccountServiceTest {
     AccountService accountService;
 
     @Mock
-    UserService userService;
+    CustomerService customerService;
 
     @Test
     void itShouldSaveAnAccountUserWithSuccess() {
@@ -40,12 +40,12 @@ public class CustomerAccountServiceTest {
         Account accountWithId = FakeAccountFactory.createAccountWithId();
         Customer customer = FakeUserFactory.generateSimpleUserWithId();
 
-        when(userService.findUserById(customer.getId())).thenReturn(customer);
+        when(customerService.findUserById(customer.getId())).thenReturn(customer);
         when(accountService.save(account)).thenReturn(accountWithId);
 
         Account createdAccount = service.save(customer.getId(), account);
 
-        verify(userService).findUserById(customer.getId());
+        verify(customerService).findUserById(customer.getId());
         verify(accountService).save(account);
 
         assertEquals(createdAccount, accountWithId);
@@ -56,7 +56,7 @@ public class CustomerAccountServiceTest {
         Account account = FakeAccountFactory.createAccount();
         Customer customer = FakeUserFactory.generateSimpleUserWithId();
 
-        when(userService.findUserById(any())).thenThrow(new UserNotFoundException("User with id 1 not found"));
+        when(customerService.findUserById(any())).thenThrow(new CustomerNotFoundException("User with id 1 not found"));
 
         Throwable exception = catchThrowable(() -> service.save(customer.getId(), account));
 

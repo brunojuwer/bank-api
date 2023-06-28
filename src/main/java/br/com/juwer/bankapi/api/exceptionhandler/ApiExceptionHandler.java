@@ -1,7 +1,6 @@
 package br.com.juwer.bankapi.api.exceptionhandler;
 
-import br.com.juwer.bankapi.domain.exceptions.InvalidTransactionException;
-import br.com.juwer.bankapi.domain.exceptions.UserNotFoundException;
+import br.com.juwer.bankapi.domain.exceptions.*;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,16 +44,28 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
 
         log.error(ex.getMessage(), ex);
-
         return handleExceptionInternal
                 (ex, problem, new HttpHeaders(), status, request);
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<?> handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<?> handleUserNotFoundException(EntityNotFoundException ex, WebRequest request) {
         String detail = ex.getMessage();
         HttpStatus status = HttpStatus.NOT_FOUND;
         ProblemType problemType = ProblemType.RESOURCE_NOT_FOUND;
+
+        Problem problem = createProblemBuilder(
+                status, problemType, detail, detail, OffsetDateTime.now())
+                .build();
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(ExistingEntityException.class)
+    public ResponseEntity<?> handleExistingEntityException(ExistingEntityException ex, WebRequest request) {
+        String detail = ex.getMessage();
+        HttpStatus status = HttpStatus.CONFLICT;
+        ProblemType problemType = ProblemType.ENTITY_ALREADY_EXISTS;
 
         Problem problem = createProblemBuilder(
                 status, problemType, detail, detail, OffsetDateTime.now())
@@ -80,6 +91,21 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<?> handleBadCredentialsException(BadCredentialsException ex, WebRequest request) {
         String detail = ex.getMessage();
         HttpStatus status = HttpStatus.UNAUTHORIZED;
+        ProblemType problemType = ProblemType.ACCESS_DENIED;
+
+        Problem problem = createProblemBuilder(
+                status, problemType, detail, detail, OffsetDateTime.now())
+                .build();
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(SecurityValidationAccountException.class)
+    public ResponseEntity<?> handleSecurityValidationAccountException(
+            SecurityValidationAccountException ex, WebRequest request
+    ) {
+        String detail = ex.getMessage();
+        HttpStatus status = HttpStatus.FORBIDDEN;
         ProblemType problemType = ProblemType.ACCESS_DENIED;
 
         Problem problem = createProblemBuilder(

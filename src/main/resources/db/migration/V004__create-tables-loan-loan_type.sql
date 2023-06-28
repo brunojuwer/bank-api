@@ -1,7 +1,7 @@
 CREATE TABLE loan (
     id bigint primary key,
     total_amount decimal(12, 2) not null,
-    reimaining_amount decimal(12, 2) not null,
+    remaining_amount decimal(12, 2) not null,
     interest decimal(4, 2) not null,
     description varchar(256) not null,
     status varchar(20) not null,

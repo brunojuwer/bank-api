@@ -1,24 +1,23 @@
 package br.com.juwer.bankapi.domain.service;
 
 import br.com.juwer.bankapi.api.dto.input.UserDTOPassword;
-import br.com.juwer.bankapi.domain.exceptions.UserNotFoundException;
+import br.com.juwer.bankapi.domain.exceptions.ExistingCustomerException;
+import br.com.juwer.bankapi.domain.exceptions.CustomerNotFoundException;
 import br.com.juwer.bankapi.domain.model.Customer;
 import br.com.juwer.bankapi.domain.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final PasswordEncoder encoder;
 
     @Transactional
     public Customer save(Customer customer) {
-//        customer.setPassword(encoder.encode(customer.getPassword()));
+        this.verifyIfCustomerAlreadyExistsByEmailOrCpf(customer.getEmail(), customer.getCpf());
         return customerRepository.save(customer);
     }
 
@@ -36,13 +35,21 @@ public class UserService {
 
     @Transactional
     public void delete(Long userId) {
-        this.findUserById(userId);
+        this.findCustomerById(userId);
         this.customerRepository.deleteById(userId);
     }
 
-    public Customer findUserById(Long userId) {
+    public Customer findCustomerById(Long userId) {
         return customerRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
+                .orElseThrow(() -> new CustomerNotFoundException(userId));
     }
 
+    private void verifyIfCustomerAlreadyExistsByEmailOrCpf(String email, String cpf) {
+        customerRepository.findByEmail(email).ifPresent(existingCustomer -> {
+            throw new ExistingCustomerException(existingCustomer.getEmail());
+        });
+        customerRepository.findByCpf(cpf).ifPresent(existingCustomer -> {
+            throw new ExistingCustomerException(existingCustomer.getCpf());
+        });
+    }
 }

@@ -10,13 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@SequenceGenerator(name = "address_seq", sequenceName = "address_seq", allocationSize = 1)
+@Embeddable
 public class Address {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "address_seq")
-    private Long id;
 
     @Column(nullable = false)
     private String street;

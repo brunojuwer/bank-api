@@ -1,10 +1,15 @@
 package br.com.juwer.bankapi.api.dto.output;
 
-public record AddressDTO(
-        Long id,
-        String street,
-        String city,
-        String state,
-        String postalCode,
-        String country
-) {}
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
+public class AddressDTO {
+
+    private String street;
+    private String city;
+    private String state;
+    private String postalCode;
+    private String country;
+}

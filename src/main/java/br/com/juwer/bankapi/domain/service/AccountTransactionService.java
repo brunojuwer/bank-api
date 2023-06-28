@@ -17,12 +17,15 @@ public class AccountTransactionService {
 
 
     @Transactional
-    public Transaction deposit(Account account, Transaction transaction) {
-       account.depositOrWithDraw(transaction.getAmount(), transaction.getOperation());
-       Transaction savedTransaction = transactionService.save(transaction);
-       accountRepository.populateAccountTransactionTable(account.getCode(), transaction.getId());
-       accountService.save(account);
+    public Transaction deposit(String accountCode, Transaction transaction) {
+        Account account = accountService.findByCode(accountCode);
+        account.depositOrWithDraw(transaction.getAmount(), transaction.getOperation());
 
-       return savedTransaction;
+        transaction.setAccountCode(accountCode);
+        Transaction savedTransaction = transactionService.save(transaction);
+        accountRepository.populateAccountTransactionTable(account.getCode(), transaction.getId());
+        accountService.update(account);
+
+        return savedTransaction;
     }
 }

@@ -3,7 +3,7 @@ package br.com.juwer.bankapi.unit.service;
 import br.com.juwer.bankapi.api.dto.input.UserDTOPassword;
 import br.com.juwer.bankapi.domain.model.Customer;
 import br.com.juwer.bankapi.domain.repository.CustomerRepository;
-import br.com.juwer.bankapi.domain.service.UserService;
+import br.com.juwer.bankapi.domain.service.CustomerService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 class CustomerServiceTest {
 
     @InjectMocks
-    UserService userService;
+    CustomerService customerService;
 
     @Mock
     CustomerRepository customerRepository;
@@ -37,7 +37,7 @@ class CustomerServiceTest {
         Customer customer = generateSimpleUser();
 
         when(customerRepository.save(any())).thenReturn(generateSimpleUserWithId());
-        Customer createdCustomer = userService.save(customer);
+        Customer createdCustomer = customerService.save(customer);
 
         verify(customerRepository).save(customer);
         assertEquals(1L, createdCustomer.getId());
@@ -49,7 +49,7 @@ class CustomerServiceTest {
 //        UserDTOPassword userDTOPassword = generateUserDTOPassword();
 //
 //        when(encoder.matches(userDTOPassword.currentPassword(), customer.getPassword())).thenReturn(true);
-//        userService.updatePassword(customer, userDTOPassword);
+//        customerService.updatePassword(customer, userDTOPassword);
 //
 //        verify(customerRepository).save(userCaptor.capture());
     }
@@ -60,7 +60,7 @@ class CustomerServiceTest {
 //        UserDTOPassword userDTOPassword = generateUserDTOPassword();
 //
 //        when(encoder.matches(userDTOPassword.currentPassword(), customer.getPassword())).thenReturn(false);
-//        Throwable exception = Assertions.catchThrowable(() -> userService.updatePassword(customer, userDTOPassword));
+//        Throwable exception = Assertions.catchThrowable(() -> customerService.updatePassword(customer, userDTOPassword));
 //
 //        assertEquals("Your current password does not match", exception.getMessage());
 //        verify(customerRepository, Mockito.never()).save(customer);
@@ -72,7 +72,7 @@ class CustomerServiceTest {
         Customer customer = generateSimpleUserWithId();
 
         when(customerRepository.findById(userId)).thenReturn(Optional.of(customer));
-        userService.delete(userId);
+        customerService.delete(userId);
 
         verify(customerRepository).findById(userId);
         verify(customerRepository).deleteById(userId);
@@ -83,7 +83,7 @@ class CustomerServiceTest {
         Long userId = 1L;
 
         when(customerRepository.findById(userId)).thenReturn(Optional.empty());
-        Throwable exception = Assertions.catchThrowable(() -> userService.delete(userId));
+        Throwable exception = Assertions.catchThrowable(() -> customerService.delete(userId));
 
         assertEquals("User with id 1 not found", exception.getMessage());
         verify(customerRepository, never()).deleteById(userId);
@@ -94,7 +94,7 @@ class CustomerServiceTest {
         Long userId = 1L;
 
         when(customerRepository.findById(userId)).thenReturn(Optional.empty());
-        Throwable exception = Assertions.catchThrowable(() -> userService.findUserById(userId));
+        Throwable exception = Assertions.catchThrowable(() -> customerService.findUserById(userId));
 
         assertEquals("User with id 1 not found", exception.getMessage());
     }

@@ -1,8 +1,8 @@
 package br.com.juwer.bankapi.domain.exceptions;
 
-public class AccountNotFoundException extends RuntimeException {
+public class AccountNotFoundException extends EntityNotFoundException {
 
     public AccountNotFoundException(String code) {
-        super(String.format("Account with id %s not found", code));
+        super(String.format("Account with code %s not found", code));
     }
 }

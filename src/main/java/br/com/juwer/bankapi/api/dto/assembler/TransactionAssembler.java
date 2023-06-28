@@ -2,18 +2,17 @@ package br.com.juwer.bankapi.api.dto.assembler;
 
 import br.com.juwer.bankapi.api.dto.output.TransactionDTO;
 import br.com.juwer.bankapi.domain.model.Transaction;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class TransactionAssembler {
 
+    private final ModelMapper mapper;
+
     public TransactionDTO toModel(Transaction transaction) {
-        return new TransactionDTO(
-                transaction.getId(),
-                transaction.getAccountCode(),
-                transaction.getAmount(),
-                transaction.getOperation(),
-                transaction.getCreatedAt()
-        );
+        return mapper.map(transaction, TransactionDTO.class);
     }
 }

@@ -1,6 +1,6 @@
 package br.com.juwer.bankapi.domain.exceptions;
 
-public class GroupNotFoundException extends RuntimeException {
+public class GroupNotFoundException extends EntityNotFoundException {
 
     public GroupNotFoundException(String message) {
         super(message);

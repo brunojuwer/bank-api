@@ -44,23 +44,23 @@ public class Account implements UserDetails {
     @Column(name = "last_login_date")
     private OffsetDateTime lastLoginDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "account_transaction",
     joinColumns = @JoinColumn(name = "account_code"),
     inverseJoinColumns = @JoinColumn(name = "transaction_id"))
     private List<Transaction> transactions = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "account_investment",
         joinColumns = @JoinColumn(name = "account_code"),
         inverseJoinColumns = @JoinColumn(name = "investment_id"))
     private List<Investment> investments = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "account_loan",
         joinColumns = @JoinColumn(name = "account_code"),
         inverseJoinColumns = @JoinColumn(name = "loan_id"))
@@ -84,18 +84,19 @@ public class Account implements UserDetails {
     }
 
 
-    public void depositOrWithDraw(BigDecimal ammount, Operation operation) {
+    public void depositOrWithDraw(BigDecimal amount, Operation operation) {
 
-        boolean isValueGreaterThanZero = ammount.compareTo(BigDecimal.ZERO) > 0;
-        boolean isValueLessThanZero = ammount.compareTo(BigDecimal.ZERO) < 0;
+        boolean isValueGreaterThanZero = amount.compareTo(BigDecimal.ZERO) > 0;
+        boolean isValueLessThanZero = amount.compareTo(BigDecimal.ZERO) < 0;
         boolean isADeposit = operation.equals(Operation.DEPOSIT);
         boolean isAWithDraw = operation.equals(Operation.WITHDRAW);
 
         if(isValueGreaterThanZero && isADeposit) {
-            this.deposit(ammount);
+            this.deposit(amount);
         }
         else if(isValueLessThanZero && isAWithDraw) {
-            this.withdraw(ammount);
+            amount = amount.multiply(BigDecimal.valueOf(-1));
+            this.withdraw(amount);
         } else {
             throw new InvalidTransactionException("Invalid value for a " + operation + " operation");
         }

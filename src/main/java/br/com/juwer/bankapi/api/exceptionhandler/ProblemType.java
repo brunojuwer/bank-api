@@ -6,6 +6,7 @@ import lombok.Getter;
 public enum ProblemType {
 
     INVALID_DATA("/invalid-data", "Invalid data"),
+    ENTITY_ALREADY_EXISTS("/entity-already-exists", "Entity already exists"),
     INCOMPREHENSIBLE_MESSAGE("/incomprihencible-message", "Incomprehensible message"),
     RESOURCE_NOT_FOUND("/resource-not-found", "Resource not found"),
     BUSINESS_ERROR("/business-error", "Violation of business logic"),

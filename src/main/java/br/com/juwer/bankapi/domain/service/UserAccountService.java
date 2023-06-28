@@ -10,12 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserAccountService {
 
-    private final UserService userService;
+    private final CustomerService customerService;
     private final AccountService accountService;
 
     @Transactional
     public Account save(Long userId, Account account) {
-        Customer customer = userService.findUserById(userId);
+        Customer customer = customerService.findCustomerById(userId);
         Account savedAccount = accountService.save(account);
 //        customer.addNewAccount(account);
         return savedAccount;

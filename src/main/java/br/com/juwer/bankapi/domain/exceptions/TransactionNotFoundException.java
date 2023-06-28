@@ -1,6 +1,6 @@
 package br.com.juwer.bankapi.domain.exceptions;
 
-public class TransactionNotFoundException extends RuntimeException {
+public class TransactionNotFoundException extends EntityNotFoundException {
 
     public TransactionNotFoundException(String message) {
         super(message);
