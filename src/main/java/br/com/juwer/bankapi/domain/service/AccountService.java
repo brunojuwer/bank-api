@@ -23,6 +23,11 @@ public class AccountService {
         return repository.save(account);
     }
 
+    @Transactional
+    public Account update(Account account) {
+        return repository.save(account);
+    }
+
 
     public Account findByCode(String accountCode) {
         return repository.findByCode(accountCode)

@@ -84,18 +84,19 @@ public class Account implements UserDetails {
     }
 
 
-    public void depositOrWithDraw(BigDecimal ammount, Operation operation) {
+    public void depositOrWithDraw(BigDecimal amount, Operation operation) {
 
-        boolean isValueGreaterThanZero = ammount.compareTo(BigDecimal.ZERO) > 0;
-        boolean isValueLessThanZero = ammount.compareTo(BigDecimal.ZERO) < 0;
+        boolean isValueGreaterThanZero = amount.compareTo(BigDecimal.ZERO) > 0;
+        boolean isValueLessThanZero = amount.compareTo(BigDecimal.ZERO) < 0;
         boolean isADeposit = operation.equals(Operation.DEPOSIT);
         boolean isAWithDraw = operation.equals(Operation.WITHDRAW);
 
         if(isValueGreaterThanZero && isADeposit) {
-            this.deposit(ammount);
+            this.deposit(amount);
         }
         else if(isValueLessThanZero && isAWithDraw) {
-            this.withdraw(ammount);
+            amount = amount.multiply(BigDecimal.valueOf(-1));
+            this.withdraw(amount);
         } else {
             throw new InvalidTransactionException("Invalid value for a " + operation + " operation");
         }

@@ -1,9 +1,6 @@
 package br.com.juwer.bankapi.api.exceptionhandler;
 
-import br.com.juwer.bankapi.domain.exceptions.EntityNotFoundException;
-import br.com.juwer.bankapi.domain.exceptions.ExistingEntityException;
-import br.com.juwer.bankapi.domain.exceptions.InvalidTransactionException;
-import br.com.juwer.bankapi.domain.exceptions.CustomerNotFoundException;
+import br.com.juwer.bankapi.domain.exceptions.*;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -94,6 +91,21 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<?> handleBadCredentialsException(BadCredentialsException ex, WebRequest request) {
         String detail = ex.getMessage();
         HttpStatus status = HttpStatus.UNAUTHORIZED;
+        ProblemType problemType = ProblemType.ACCESS_DENIED;
+
+        Problem problem = createProblemBuilder(
+                status, problemType, detail, detail, OffsetDateTime.now())
+                .build();
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(SecurityValidationAccountException.class)
+    public ResponseEntity<?> handleSecurityValidationAccountException(
+            SecurityValidationAccountException ex, WebRequest request
+    ) {
+        String detail = ex.getMessage();
+        HttpStatus status = HttpStatus.FORBIDDEN;
         ProblemType problemType = ProblemType.ACCESS_DENIED;
 
         Problem problem = createProblemBuilder(
