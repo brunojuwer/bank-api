@@ -32,7 +32,6 @@ public class AccountService {
         return repository.save(account);
     }
 
-
     @Transactional
     public void updatePassword(Account account, AccountInputPassword accountInputPassword) {
 //        final boolean currentPasswordMatches = encoder

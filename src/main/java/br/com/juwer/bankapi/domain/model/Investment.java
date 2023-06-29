@@ -3,16 +3,17 @@ package br.com.juwer.bankapi.domain.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Data
 @Table(name = "investment")
 @SequenceGenerator(name = "investment_seq", sequenceName = "investment_seq", allocationSize = 1)
 public class Investment {
@@ -32,6 +33,4 @@ public class Investment {
     @CreationTimestamp
     @Column(nullable = false, name = "created_at")
     private OffsetDateTime createdAt;
-
-
 }

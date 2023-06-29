@@ -53,12 +53,6 @@ public class Account implements UserDetails {
     private List<Transaction> transactions = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "account_investment",
-        joinColumns = @JoinColumn(name = "account_code"),
-        inverseJoinColumns = @JoinColumn(name = "investment_id"))
-    private List<Investment> investments = new ArrayList<>();
-
-    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "account_loan",
         joinColumns = @JoinColumn(name = "account_code"),
         inverseJoinColumns = @JoinColumn(name = "loan_id"))
