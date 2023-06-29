@@ -42,7 +42,7 @@ public class AccountTransactionTest {
         when(transactionService.save(newTransaction)).thenReturn(transactionWithId);
 
         Transaction savedTransaction = service
-                .deposit(account.getCode(), newTransaction);
+                .depositOrWithdraw(account.getCode(), newTransaction);
 
         verify(accountService).save(account);
         verify(transactionService).save(newTransaction);

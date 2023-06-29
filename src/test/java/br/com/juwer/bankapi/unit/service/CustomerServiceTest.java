@@ -1,6 +1,6 @@
 package br.com.juwer.bankapi.unit.service;
 
-import br.com.juwer.bankapi.api.dto.input.UserDTOPassword;
+import br.com.juwer.bankapi.api.dto.input.AccountInputPassword;
 import br.com.juwer.bankapi.domain.model.Customer;
 import br.com.juwer.bankapi.domain.repository.CustomerRepository;
 import br.com.juwer.bankapi.domain.service.CustomerService;
@@ -46,7 +46,7 @@ class CustomerServiceTest {
     @Test
     void itShouldUpdateUserPasswordWithSuccess() {
 //        Customer customer = generateSimpleUserWithIdAndEncodedPassword();
-//        UserDTOPassword userDTOPassword = generateUserDTOPassword();
+//        AccountInputPassword userDTOPassword = generateUserDTOPassword();
 //
 //        when(encoder.matches(userDTOPassword.currentPassword(), customer.getPassword())).thenReturn(true);
 //        customerService.updatePassword(customer, userDTOPassword);
@@ -57,7 +57,7 @@ class CustomerServiceTest {
     void itShouldThrowCurrentPasswordDoesNotMatchException() {
 //
 //        Customer customer = generateSimpleUserWithIdAndEncodedPassword();
-//        UserDTOPassword userDTOPassword = generateUserDTOPassword();
+//        AccountInputPassword userDTOPassword = generateUserDTOPassword();
 //
 //        when(encoder.matches(userDTOPassword.currentPassword(), customer.getPassword())).thenReturn(false);
 //        Throwable exception = Assertions.catchThrowable(() -> customerService.updatePassword(customer, userDTOPassword));
@@ -125,7 +125,8 @@ class CustomerServiceTest {
                 .build();
     }
 
-    private static UserDTOPassword generateUserDTOPassword() {
-        return new UserDTOPassword("qwe@123", "4321");
+    private static AccountInputPassword generateUserDTOPassword() {
+        return null;
+//        return new AccountInputPassword("qwe@123", "4321");
     }
 }

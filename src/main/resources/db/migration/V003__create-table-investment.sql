@@ -13,9 +13,12 @@ start with 1
 minvalue 1
 OWNED BY investment.id;
 
-CREATE TABLE account_investment (
+CREATE TABLE account_investments (
     account_code varchar(8) not null,
     investment_id bigint not null,
+    total_balance decimal(12,2) not null,
+    created_at timestamptz not null,
+    updated_at timestamptz not null,
 
     primary key (account_code, investment_id),
 
