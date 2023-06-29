@@ -5,7 +5,6 @@ import br.com.juwer.bankapi.domain.model.Transaction.Operation;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,7 +39,6 @@ public class Account implements UserDetails {
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
 
-    @UpdateTimestamp
     @Column(name = "last_login_date")
     private OffsetDateTime lastLoginDate;
 

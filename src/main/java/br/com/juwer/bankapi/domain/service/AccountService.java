@@ -10,6 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class AccountService {
@@ -43,8 +45,15 @@ public class AccountService {
         repository.save(account);
     }
 
+    @Transactional
+    public void updateLastLoginDate(Account account) {
+        account.setLastLoginDate(OffsetDateTime.now());
+        repository.save(account);
+    }
+
     public Account findByCode(String accountCode) {
         return repository.findByCode(accountCode)
                 .orElseThrow(() -> new AccountNotFoundException(accountCode));
     }
+
 }

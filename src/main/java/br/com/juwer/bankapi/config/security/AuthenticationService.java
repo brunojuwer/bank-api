@@ -5,6 +5,7 @@ import br.com.juwer.bankapi.config.security.dtoinput.AuthenticationRequest;
 import br.com.juwer.bankapi.domain.exceptions.AccountNotFoundException;
 import br.com.juwer.bankapi.domain.exceptions.EntityNotFoundException;
 import br.com.juwer.bankapi.domain.model.Account;
+import br.com.juwer.bankapi.domain.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -18,6 +19,7 @@ public class AuthenticationService {
 
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final AccountService accountService;
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         Authentication authenticate;
@@ -31,6 +33,7 @@ public class AuthenticationService {
 
         Account account = (Account) authenticate.getPrincipal();
         String token = jwtService.generateToken(account);
+        accountService.updateLastLoginDate(account);
 
         return new AuthenticationResponse(token, account.getCode());
     }

@@ -1,8 +1,7 @@
 package br.com.juwer.bankapi.domain.service;
 
-import br.com.juwer.bankapi.api.dto.input.AccountInputPassword;
-import br.com.juwer.bankapi.domain.exceptions.ExistingCustomerException;
 import br.com.juwer.bankapi.domain.exceptions.CustomerNotFoundException;
+import br.com.juwer.bankapi.domain.exceptions.ExistingCustomerException;
 import br.com.juwer.bankapi.domain.model.Customer;
 import br.com.juwer.bankapi.domain.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
