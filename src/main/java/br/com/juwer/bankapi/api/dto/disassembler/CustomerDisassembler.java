@@ -7,12 +7,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
-public class CustomerDisassembler {
+public class CustomerDisassembler extends GenericDisassembler<CustomerInput, Customer>{
 
-    private final ModelMapper mapper;
-
-    public Customer toDomainModel(CustomerInput input) {
-        return mapper.map(input, Customer.class);
+    public CustomerDisassembler(ModelMapper mapper) {
+        super(mapper);
     }
 }

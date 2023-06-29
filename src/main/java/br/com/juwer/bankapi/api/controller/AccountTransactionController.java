@@ -23,19 +23,18 @@ import org.springframework.web.bind.annotation.*;
 public class AccountTransactionController {
 
     private final AccountTransactionService accountTransactionService;
-    private final AccountService accountService;
     private final TransactionDisassembler transactionDisassembler;
     private final TransactionAssembler transactionAssembler;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @CheckSecurity.Accounts.CanMakeTransfer
-    public TransactionDTO deposit(
+    public TransactionDTO depositOrWithdraw(
             @PathVariable String accountCode,
             @RequestBody TransactionDTOInput transactionDTOInput
     ) {
         Transaction transaction = transactionDisassembler.toDomainModel(transactionDTOInput);
-        accountTransactionService.deposit(accountCode, transaction);
+        accountTransactionService.depositOrWithdraw(accountCode, transaction);
         return transactionAssembler.toModel(transaction);
     }
 

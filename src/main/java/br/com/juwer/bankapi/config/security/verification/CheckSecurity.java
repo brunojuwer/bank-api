@@ -19,9 +19,29 @@ public @interface CheckSecurity {
         @Target(METHOD)
         @interface CanMakeTransfer {}
 
-        @PreAuthorize(value = "hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
         @Retention(RUNTIME)
         @Target(METHOD)
-        @interface CanMakeConsult {}
+        @interface CanConsult {}
     }
+
+    @interface Customers {
+
+        @PreAuthorize("@securityUtils.verifyIfCustomerIdMatches(#customerId)")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        @interface CanConsult {}
+
+        @PreAuthorize("(isAuthenticated() and " +
+                " @securityUtils.verifyIfCustomerIdMatches(#customerId)")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        @interface CanUpdate {}
+
+//        @PreAuthorize("(isAuthenticated())
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        @interface CanEdit {}
+    }
+
 }

@@ -17,7 +17,7 @@ public class AccountTransactionService {
 
 
     @Transactional
-    public Transaction deposit(String accountCode, Transaction transaction) {
+    public Transaction depositOrWithdraw(String accountCode, Transaction transaction) {
         Account account = accountService.findByCode(accountCode);
         account.depositOrWithDraw(transaction.getAmount(), transaction.getOperation());
 

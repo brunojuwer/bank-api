@@ -1,6 +1,6 @@
 package br.com.juwer.bankapi.domain.service;
 
-import br.com.juwer.bankapi.api.dto.input.UserDTOPassword;
+import br.com.juwer.bankapi.api.dto.input.AccountInputPassword;
 import br.com.juwer.bankapi.domain.exceptions.ExistingCustomerException;
 import br.com.juwer.bankapi.domain.exceptions.CustomerNotFoundException;
 import br.com.juwer.bankapi.domain.model.Customer;
@@ -17,20 +17,27 @@ public class CustomerService {
 
     @Transactional
     public Customer save(Customer customer) {
-        this.verifyIfCustomerAlreadyExistsByEmailOrCpf(customer.getEmail(), customer.getCpf());
+        this.verifyIfCustomerAlreadyExistsByEmail(customer.getEmail());
+        this.verifyIfCustomerAlreadyExistsByCpf(customer.getCpf());
+
         return customerRepository.save(customer);
     }
 
     @Transactional
-    public void updatePassword(Customer customer, UserDTOPassword userDTOPassword) {
-//        final boolean currentPasswordMatches = encoder
-//                .matches(userDTOPassword.currentPassword(), customer.getPassword());
-//
-//        if(!currentPasswordMatches) {
-//            throw new CurrentPasswordDoesNotMatchException("Your current password does not match");
-//        }
-//        customer.setPassword(encoder.encode(userDTOPassword.newPassword()));
-        customerRepository.save(customer);
+    public Customer update(Customer customer, Customer customerWithOldData) {
+        customer.setId(customerWithOldData.getId());
+        customer.setCreatedAt(customerWithOldData.getCreatedAt());
+
+        boolean isEmailNew = !customer.getEmail().equals(customerWithOldData.getEmail());
+        boolean isCpfNew = !customer.getCpf().equals(customerWithOldData.getCpf());
+
+        if(isEmailNew){
+            verifyIfCustomerAlreadyExistsByEmail(customer.getEmail());
+        }
+        if (isCpfNew) {
+            verifyIfCustomerAlreadyExistsByCpf(customer.getCpf());
+        }
+        return customerRepository.save(customer);
     }
 
     @Transactional
@@ -39,15 +46,18 @@ public class CustomerService {
         this.customerRepository.deleteById(userId);
     }
 
-    public Customer findCustomerById(Long userId) {
-        return customerRepository.findById(userId)
-                .orElseThrow(() -> new CustomerNotFoundException(userId));
+    public Customer findCustomerById(Long customerId) {
+        return customerRepository.findById(customerId)
+                .orElseThrow(() -> new CustomerNotFoundException(customerId));
     }
 
-    private void verifyIfCustomerAlreadyExistsByEmailOrCpf(String email, String cpf) {
+    private void verifyIfCustomerAlreadyExistsByEmail(String email) {
         customerRepository.findByEmail(email).ifPresent(existingCustomer -> {
             throw new ExistingCustomerException(existingCustomer.getEmail());
         });
+    }
+
+    private void verifyIfCustomerAlreadyExistsByCpf(String cpf) {
         customerRepository.findByCpf(cpf).ifPresent(existingCustomer -> {
             throw new ExistingCustomerException(existingCustomer.getCpf());
         });
