@@ -26,7 +26,7 @@ public class AccountTransactionController {
     private final TransactionDisassembler transactionDisassembler;
     private final TransactionAssembler transactionAssembler;
 
-    @PostMapping
+    @PutMapping
     @ResponseStatus(HttpStatus.CREATED)
     @CheckSecurity.Accounts.CanMakeTransfer
     public TransactionDTO depositOrWithdraw(

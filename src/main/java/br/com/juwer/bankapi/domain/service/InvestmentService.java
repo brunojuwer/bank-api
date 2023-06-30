@@ -23,6 +23,11 @@ public class InvestmentService {
         return repository.save(investment);
     }
 
+
+    public Investment update(Investment investment) {
+        return repository.save(investment);
+    }
+
     @Transactional
     public Investment updateProfitabillity(Long investmentId, BigDecimal profitabillity) {
         Investment investment = findInvestmentById(investmentId);

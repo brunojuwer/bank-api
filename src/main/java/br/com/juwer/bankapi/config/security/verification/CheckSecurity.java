@@ -23,6 +23,11 @@ public @interface CheckSecurity {
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface CanConsult {}
+
+        @PreAuthorize("@securityUtils.verifyIfAccountMatches(#accountCode)")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        @interface OwsAccount {}
     }
 
     @interface Customers {

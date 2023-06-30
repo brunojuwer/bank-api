@@ -2,8 +2,9 @@ package br.com.juwer.bankapi.domain.service;
 
 import br.com.juwer.bankapi.api.dto.input.AccountInputPassword;
 import br.com.juwer.bankapi.domain.exceptions.AccountNotFoundException;
+import br.com.juwer.bankapi.domain.exceptions.CurrentPasswordDoesNotMatchException;
 import br.com.juwer.bankapi.domain.model.Account;
-import br.com.juwer.bankapi.domain.model.Customer;
+import br.com.juwer.bankapi.domain.projections.AccountResume;
 import br.com.juwer.bankapi.domain.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,13 +35,13 @@ public class AccountService {
 
     @Transactional
     public void updatePassword(Account account, AccountInputPassword accountInputPassword) {
-//        final boolean currentPasswordMatches = encoder
-//                .matches(accountInputPassword.currentPassword(), customer.getPassword());
-//
-//        if(!currentPasswordMatches) {
-//            throw new CurrentPasswordDoesNotMatchException("Your current password does not match");
-//        }
-//        customer.setPassword(encoder.encode(accountInputPassword.newPassword()));
+        final boolean currentPasswordMatches = encoder
+                .matches(accountInputPassword.getCurrentPassword(), account.getPassword());
+
+        if(!currentPasswordMatches) {
+            throw new CurrentPasswordDoesNotMatchException("Your current password does not match");
+        }
+        account.setPassword(encoder.encode(accountInputPassword.getNewPassword()));
         repository.save(account);
     }
 
@@ -52,6 +53,16 @@ public class AccountService {
 
     public Account findByCode(String accountCode) {
         return repository.findByCode(accountCode)
+                .orElseThrow(() -> new AccountNotFoundException(accountCode));
+    }
+
+    public AccountResume findResumeByCode(String accountCode) {
+        return repository.findResumeByCode(accountCode)
+                .orElseThrow(() -> new AccountNotFoundException(accountCode));
+    }
+
+    public Account findByCodeWithCustomer(String accountCode) {
+        return repository.findByCodeWithCustomer(accountCode)
                 .orElseThrow(() -> new AccountNotFoundException(accountCode));
     }
 

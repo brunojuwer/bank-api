@@ -133,6 +133,28 @@ public class Account implements UserDetails {
         return true;
     }
 
+    public void addOrSubtractBalance(BigDecimal amount, Operation operation) {
+        if(operation.equals(Operation.APPLICATION)) {
+            this.subtractBalance(amount);
+        }
+        if(operation.equals(Operation.RECLAIM)) {
+            this.addToBalance(amount);
+        }
+    }
+    public void subtractBalance(BigDecimal amount) {
+//        amount = convertNegativeNumber(amount);
+        this.balance = this.balance.subtract(amount);
+    }
+
+    public void addToBalance(BigDecimal amount) {
+        this.balance = this.balance.add(amount);
+    }
+
+    public BigDecimal convertNegativeNumber(BigDecimal number) {
+        return number.multiply(BigDecimal.valueOf(-1));
+    }
+
+
     @Getter
     public enum Type {
         PF,
