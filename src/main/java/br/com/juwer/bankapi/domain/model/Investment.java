@@ -33,4 +33,17 @@ public class Investment {
     @CreationTimestamp
     @Column(nullable = false, name = "created_at")
     private OffsetDateTime createdAt;
+
+    public void subtractBalance(BigDecimal amount) {
+//        amount = convertNegativeNumber(amount);
+        this.balance = this.balance.subtract(amount);
+    }
+
+    public void addToBalance(BigDecimal amount) {
+        this.balance = this.balance.add(amount);
+    }
+
+    public BigDecimal convertNegativeNumber(BigDecimal number) {
+        return number.multiply(BigDecimal.valueOf(-1));
+    }
 }

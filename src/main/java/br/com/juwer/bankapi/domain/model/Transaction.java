@@ -28,6 +28,9 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private Operation operation;
 
+    @Column(nullable = false)
+    private String product;
+
     @CreationTimestamp
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
@@ -38,6 +41,7 @@ public class Transaction {
         WITHDRAW,
         TRANSFER,
         APPLICATION,
+        RECLAIM,
         PIX
     }
 }

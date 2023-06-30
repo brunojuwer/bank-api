@@ -115,6 +115,21 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
 
+    @ExceptionHandler(CurrentPasswordDoesNotMatchException.class    )
+    public ResponseEntity<?> handleCurrentPasswordDoesNotMatchException(
+            CurrentPasswordDoesNotMatchException ex, WebRequest request
+    ) {
+        String detail = ex.getMessage();
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ProblemType problemType = ProblemType.INVALID_DATA;
+
+        Problem problem = createProblemBuilder(
+                status, problemType, detail, detail, OffsetDateTime.now())
+                .build();
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+    }
+
     @Override
     protected ResponseEntity<Object> handleExceptionInternal
             (Exception ex, @Nullable  Object body, HttpHeaders headers,

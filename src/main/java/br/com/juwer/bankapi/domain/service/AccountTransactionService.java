@@ -21,11 +21,16 @@ public class AccountTransactionService {
         Account account = accountService.findByCode(accountCode);
         account.depositOrWithDraw(transaction.getAmount(), transaction.getOperation());
 
+        transaction.setProduct("CURRENT_ACCOUNT");
         transaction.setAccountCode(accountCode);
         Transaction savedTransaction = transactionService.save(transaction);
         accountRepository.populateAccountTransactionTable(account.getCode(), transaction.getId());
         accountService.update(account);
 
         return savedTransaction;
+    }
+
+    public void create(Transaction transaction) {
+        transactionService.save(transaction);
     }
 }
