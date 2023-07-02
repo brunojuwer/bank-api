@@ -4,7 +4,6 @@ import br.com.juwer.bankapi.api.dto.assembler.AccountInvestmentsDTOAssembler;
 import br.com.juwer.bankapi.api.dto.input.TransactionDTOInput;
 import br.com.juwer.bankapi.api.dto.output.AccountInvestmentsDTO;
 import br.com.juwer.bankapi.domain.model.Account;
-import br.com.juwer.bankapi.domain.model.AccountInvestmentRelationshipIDKeys;
 import br.com.juwer.bankapi.domain.model.AccountInvestments;
 import br.com.juwer.bankapi.domain.model.Investment;
 import br.com.juwer.bankapi.domain.repository.AccountInvestmentsRepository;
@@ -53,5 +52,4 @@ public class AccountInvestmentsController {
                 .updatedAt(investments.getUpdatedAt())
                 .build();
     }
-
 }

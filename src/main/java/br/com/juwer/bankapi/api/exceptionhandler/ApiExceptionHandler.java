@@ -43,7 +43,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 status, problemType, detail, detail, OffsetDateTime.now())
                 .build();
 
-        log.error(ex.getMessage(), ex);
+        log.trace(ex.getMessage(), ex);
+
         return handleExceptionInternal
                 (ex, problem, new HttpHeaders(), status, request);
     }
@@ -118,6 +119,21 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(CurrentPasswordDoesNotMatchException.class    )
     public ResponseEntity<?> handleCurrentPasswordDoesNotMatchException(
             CurrentPasswordDoesNotMatchException ex, WebRequest request
+    ) {
+        String detail = ex.getMessage();
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ProblemType problemType = ProblemType.INVALID_DATA;
+
+        Problem problem = createProblemBuilder(
+                status, problemType, detail, detail, OffsetDateTime.now())
+                .build();
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(InsufficientBalanceException.class)
+    public ResponseEntity<?> handleInsufficientBalanceException(
+            InsufficientBalanceException ex, WebRequest request
     ) {
         String detail = ex.getMessage();
         HttpStatus status = HttpStatus.BAD_REQUEST;

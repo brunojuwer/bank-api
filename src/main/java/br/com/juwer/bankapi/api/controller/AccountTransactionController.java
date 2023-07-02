@@ -11,6 +11,7 @@ import br.com.juwer.bankapi.domain.model.Transaction;
 import br.com.juwer.bankapi.domain.model.Customer;
 import br.com.juwer.bankapi.domain.service.AccountService;
 import br.com.juwer.bankapi.domain.service.AccountTransactionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,7 +32,7 @@ public class AccountTransactionController {
     @CheckSecurity.Accounts.CanMakeTransfer
     public TransactionDTO depositOrWithdraw(
             @PathVariable String accountCode,
-            @RequestBody TransactionDTOInput transactionDTOInput
+            @RequestBody @Valid TransactionDTOInput transactionDTOInput
     ) {
         Transaction transaction = transactionDisassembler.toDomainModel(transactionDTOInput);
         accountTransactionService.depositOrWithdraw(accountCode, transaction);

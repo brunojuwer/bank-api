@@ -1,5 +1,6 @@
 package br.com.juwer.bankapi.api.dto.input;
 
+import br.com.juwer.bankapi.config.validation.GreaterThanZero;
 import br.com.juwer.bankapi.domain.model.Transaction.Operation;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -15,6 +16,6 @@ public class TransactionDTOInput {
     private Operation operation;
 
     @NotNull
+    @GreaterThanZero
     private BigDecimal amount;
-
 }
