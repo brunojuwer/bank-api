@@ -1,8 +1,8 @@
 package br.com.juwer.bankapi.domain.exceptions;
 
-public class InsuficientBalanceException extends RuntimeException {
+public class InsufficientBalanceException extends RuntimeException {
 
-    public InsuficientBalanceException(String message) {
+    public InsufficientBalanceException(String message) {
         super(message);
     }
 }

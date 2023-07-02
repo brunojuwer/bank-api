@@ -2,6 +2,7 @@ package br.com.juwer.bankapi.domain.service;
 
 import br.com.juwer.bankapi.api.dto.input.TransactionDTOInput;
 import br.com.juwer.bankapi.domain.exceptions.AccountInvestmentNotFoundException;
+import br.com.juwer.bankapi.domain.exceptions.InsufficientBalanceException;
 import br.com.juwer.bankapi.domain.exceptions.InvalidTransactionException;
 import br.com.juwer.bankapi.domain.model.*;
 import br.com.juwer.bankapi.domain.repository.AccountInvestmentsRepository;
@@ -9,10 +10,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static br.com.juwer.bankapi.domain.model.Transaction.Operation.APPLICATION;
 import static br.com.juwer.bankapi.domain.model.Transaction.Operation.RECLAIM;
+import static java.lang.String.format;
 
 @Service
 @RequiredArgsConstructor
@@ -54,16 +57,15 @@ public class AccountInvestmentsService {
         if (!isANewInvestmentApplication) {
             switch (input.getOperation()) {
                 case RECLAIM -> {
-                    account.addToBalance(input.getAmount());
-                    accountInvestment.reclaim(input.getAmount());
-                    investment.subtractBalance(input.getAmount());
-                    transaction.setOperation(RECLAIM);
+                    if(this.isReclaimValueMoreThanInvestmentHave(input.getAmount(), accountInvestment)){
+                        throw new InsufficientBalanceException(
+                                format("The maximum amount to reclaim is: %s ", accountInvestment.getTotalBalance())
+                        );
+                    }
+                    makeReclaim(account, accountInvestment, investment, transaction, input);
                 }
                 case APPLICATION -> {
-                    account.subtractBalance(input.getAmount());
-                    accountInvestment.application(input.getAmount());
-                    investment.addToBalance(input.getAmount());
-                    transaction.setOperation(APPLICATION);
+                    makeApplication(account, accountInvestment, investment, transaction, input);
                 }
                 default -> {
                 }
@@ -79,8 +81,38 @@ public class AccountInvestmentsService {
     private AccountInvestments getAccountInvestments(Account account, Investment investment) {
         var relationshipIDKeys = new AccountInvestmentRelationshipIDKeys(account, investment);
         Optional<AccountInvestments> investmentAc = repository.findById(relationshipIDKeys);
-
         return investmentAc.orElseGet(AccountInvestments::new);
+    }
+
+    private boolean isReclaimValueMoreThanInvestmentHave(BigDecimal amount, AccountInvestments investment) {
+        return investment.getTotalBalance().compareTo(amount) < 0;
+    }
+
+    private void makeReclaim(
+            Account account,
+            AccountInvestments accountInvestment,
+            Investment investment,
+            Transaction transaction,
+            TransactionDTOInput input
+
+    ){
+        account.addToBalance(input.getAmount());
+        accountInvestment.reclaim(input.getAmount());
+        investment.subtractBalance(input.getAmount());
+        transaction.setOperation(RECLAIM);
+    }
+
+    private void makeApplication(
+            Account account,
+            AccountInvestments accountInvestment,
+            Investment investment,
+            Transaction transaction,
+            TransactionDTOInput input
+    ) {
+        account.subtractBalance(input.getAmount());
+        accountInvestment.application(input.getAmount());
+        investment.addToBalance(input.getAmount());
+        transaction.setOperation(APPLICATION);
     }
 
     public AccountInvestments findAccountInvesment(AccountInvestmentRelationshipIDKeys keys){

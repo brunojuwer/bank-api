@@ -1,5 +1,6 @@
 package br.com.juwer.bankapi.domain.model;
 
+import br.com.juwer.bankapi.domain.exceptions.InsufficientBalanceException;
 import br.com.juwer.bankapi.domain.exceptions.InvalidTransactionException;
 import br.com.juwer.bankapi.domain.model.Transaction.Operation;
 import jakarta.persistence.*;
@@ -77,30 +78,33 @@ public class Account implements UserDetails {
 
 
     public void depositOrWithDraw(BigDecimal amount, Operation operation) {
-
-        boolean isValueGreaterThanZero = amount.compareTo(BigDecimal.ZERO) > 0;
-        boolean isValueLessThanZero = amount.compareTo(BigDecimal.ZERO) < 0;
         boolean isADeposit = operation.equals(Operation.DEPOSIT);
         boolean isAWithDraw = operation.equals(Operation.WITHDRAW);
 
-        if(isValueGreaterThanZero && isADeposit) {
-            this.deposit(amount);
+        if(isADeposit) {
+            this.addToBalance(amount);
         }
-        else if(isValueLessThanZero && isAWithDraw) {
-            amount = amount.multiply(BigDecimal.valueOf(-1));
-            this.withdraw(amount);
+        else if(isAWithDraw) {
+            this.subtractBalance(amount);
         } else {
             throw new InvalidTransactionException("Invalid value for a " + operation + " operation");
         }
-
     }
 
-    private void withdraw(BigDecimal ammount) {
-        this.balance = this.balance.subtract(ammount);
+    public void subtractBalance(BigDecimal amount) {
+        if(this.balance.compareTo(amount) < 0) {
+            throw new InsufficientBalanceException("Insufficient balance on current account");
+        }
+        this.balance = this.balance.subtract(amount);
     }
 
-    private void deposit(BigDecimal ammount) {
-        this.balance = this.balance.add(ammount);
+    public void addToBalance(BigDecimal amount) {
+        this.balance = this.balance.add(amount);
+    }
+
+    @Getter
+    public enum Type {
+        PF, PJ
     }
 
     @Override
@@ -131,33 +135,5 @@ public class Account implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public void addOrSubtractBalance(BigDecimal amount, Operation operation) {
-        if(operation.equals(Operation.APPLICATION)) {
-            this.subtractBalance(amount);
-        }
-        if(operation.equals(Operation.RECLAIM)) {
-            this.addToBalance(amount);
-        }
-    }
-    public void subtractBalance(BigDecimal amount) {
-//        amount = convertNegativeNumber(amount);
-        this.balance = this.balance.subtract(amount);
-    }
-
-    public void addToBalance(BigDecimal amount) {
-        this.balance = this.balance.add(amount);
-    }
-
-    public BigDecimal convertNegativeNumber(BigDecimal number) {
-        return number.multiply(BigDecimal.valueOf(-1));
-    }
-
-
-    @Getter
-    public enum Type {
-        PF,
-        PJ
     }
 }
