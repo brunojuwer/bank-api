@@ -6,6 +6,7 @@ import br.com.juwer.bankapi.api.dto.output.AccountInvestmentsDTO;
 import br.com.juwer.bankapi.domain.model.Account;
 import br.com.juwer.bankapi.domain.model.AccountInvestments;
 import br.com.juwer.bankapi.domain.model.Investment;
+import br.com.juwer.bankapi.domain.projections.AccountInvestmentResume;
 import br.com.juwer.bankapi.domain.repository.AccountInvestmentsRepository;
 import br.com.juwer.bankapi.domain.service.AccountInvestmentsService;
 import br.com.juwer.bankapi.domain.service.AccountService;
@@ -13,6 +14,8 @@ import br.com.juwer.bankapi.domain.service.InvestmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/accounts/{accountCode}/investments")
@@ -25,14 +28,18 @@ public class AccountInvestmentsController {
     private final InvestmentService investmentService;
     private final AccountInvestmentsDTOAssembler assembler;
 
-//    @GetMapping("/{investmentId}")
-//    public AccountInvestmentsDTO findOne(
-//            @PathVariable Long investmentId,
-//            @PathVariable String accountCode
-//    ) {
-//        AccountInvestments investment = service.findByCodes(accountCode, investmentId);
-//        return assembler.toModel(investment);
-//    }
+    @GetMapping("/{investmentId}")
+    public AccountInvestmentResume findOne(
+            @PathVariable Long investmentId,
+            @PathVariable String accountCode
+    ) {
+        return service.findAccountInvestment(accountCode, investmentId);
+    }
+
+    @GetMapping
+    public List<AccountInvestmentResume> findAll(@PathVariable String accountCode) {
+        return service.findAccountInvestment(accountCode);
+    }
 
     @PutMapping("/{investmentId}")
     public AccountInvestmentsDTO applicationOrRetrive(
