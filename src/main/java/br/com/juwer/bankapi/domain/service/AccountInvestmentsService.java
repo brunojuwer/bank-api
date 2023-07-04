@@ -5,13 +5,16 @@ import br.com.juwer.bankapi.domain.exceptions.AccountInvestmentNotFoundException
 import br.com.juwer.bankapi.domain.exceptions.InsufficientBalanceException;
 import br.com.juwer.bankapi.domain.exceptions.InvalidTransactionException;
 import br.com.juwer.bankapi.domain.model.*;
+import br.com.juwer.bankapi.domain.projections.AccountInvestmentResume;
 import br.com.juwer.bankapi.domain.repository.AccountInvestmentsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static br.com.juwer.bankapi.domain.model.Transaction.Operation.APPLICATION;
 import static br.com.juwer.bankapi.domain.model.Transaction.Operation.RECLAIM;
@@ -25,6 +28,33 @@ public class AccountInvestmentsService {
     private final AccountTransactionService accountTransactionService;
     private final AccountService accountService;
     private final InvestmentService investmentService;
+
+
+    public AccountInvestmentResume findAccountInvestment(String accountCode, Long investmemtId){
+        AccountInvestments investment = repository.findByIds(accountCode, investmemtId)
+                .orElseThrow(() ->
+                        new AccountInvestmentNotFoundException("Account investment not found")
+                );
+        return new AccountInvestmentResume(
+                        investment.getInvestment().getId(),
+                        investment.getCode(),
+                        investment.getTotalBalance(),
+                        investment.getInvestment().getName()
+                    );
+    }
+
+    public List<AccountInvestmentResume> findAccountInvestment(String accountCode){
+        return repository.findAll(accountCode)
+                .orElseThrow(() ->
+                        new AccountInvestmentNotFoundException("Account investment not found")
+                ).stream()
+                 .map(investment -> new AccountInvestmentResume(
+                            investment.getInvestment().getId(),
+                            investment.getCode(),
+                            investment.getTotalBalance(),
+                            investment.getInvestment().getName()))
+                .collect(Collectors.toList());
+    }
 
     @Transactional
     public AccountInvestments applicationOrReclaim(
@@ -113,12 +143,5 @@ public class AccountInvestmentsService {
         accountInvestment.application(input.getAmount());
         investment.addToBalance(input.getAmount());
         transaction.setOperation(APPLICATION);
-    }
-
-    public AccountInvestments findAccountInvesment(AccountInvestmentRelationshipIDKeys keys){
-        return repository.findById(keys)
-                .orElseThrow(() ->
-                    new AccountInvestmentNotFoundException("Account investment not found")
-                );
     }
 }

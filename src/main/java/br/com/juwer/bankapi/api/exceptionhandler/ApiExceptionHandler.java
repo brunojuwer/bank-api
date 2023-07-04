@@ -43,7 +43,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 status, problemType, detail, detail, OffsetDateTime.now())
                 .build();
 
-        log.trace(ex.getMessage(), ex);
+        log.error(ex.getMessage(), ex);
 
         return handleExceptionInternal
                 (ex, problem, new HttpHeaders(), status, request);
