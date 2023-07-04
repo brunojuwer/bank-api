@@ -13,13 +13,10 @@ CREATE TABLE loan (
 CREATE TABLE loan_type (
     id bigint primary key,
     name varchar(30) not null,
-    description varchar(180) not null,
-    loan_id bigint not null,
-
-    CONSTRAINT fk_loan_id FOREIGN KEY (loan_id) REFERENCES loan (id)
+    description varchar(180) not null
 );
 
-
+ALTER TABLE loan ADD CONSTRAINT fk_loan_type_id FOREIGN KEY (loan_type_id) references loan_type (id);
 
 CREATE TABLE account_loan (
     account_code varchar(8) not null,

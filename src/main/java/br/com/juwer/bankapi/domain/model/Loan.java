@@ -27,6 +27,9 @@ public class Loan {
     @Column(name = "remaining_amount")
     private BigDecimal remainingAmount;
 
+    @Column(name = "amount_paid")
+    private BigDecimal amountPaid;
+
     private BigDecimal interest;
 
     private String description;
@@ -41,6 +44,10 @@ public class Loan {
     @CreationTimestamp
     @Column(name = "finished_at", nullable = false)
     private OffsetDateTime finishedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "loan_type_id")
+    private LoanType loanType;
 
     public enum Status {
         PENDING,

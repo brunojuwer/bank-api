@@ -3,12 +3,13 @@ package br.com.juwer.bankapi.domain.model;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @Entity
 @Table(name = "loan_type")
 @SequenceGenerator(name = "loan_type_seq", sequenceName = "loan_type_seq", allocationSize = 1)
+@NoArgsConstructor
 public class LoanType {
 
     @Id
@@ -18,8 +19,4 @@ public class LoanType {
     private String name;
 
     private String description;
-
-    @ManyToOne
-    @JoinColumn(name = "loan_id")
-    private Loan loan;
 }
