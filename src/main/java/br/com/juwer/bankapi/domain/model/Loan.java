@@ -3,6 +3,7 @@ package br.com.juwer.bankapi.domain.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 @Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -21,8 +23,8 @@ public class Loan {
     @GeneratedValue(strategy = GenerationType.SEQUENCE , generator = "loan_seq")
     private Long id;
 
-    @Column(name = "total_amount")
-    private BigDecimal totalAmount;
+    @Column(name = "required_amount")
+    private BigDecimal requiredAmount;
 
     @Column(name = "remaining_amount")
     private BigDecimal remainingAmount;
@@ -41,13 +43,20 @@ public class Loan {
     @Column(name = "issued_at", nullable = false)
     private OffsetDateTime issuedAt;
 
-    @CreationTimestamp
-    @Column(name = "finished_at", nullable = false)
+    @Column(name = "finished_at")
     private OffsetDateTime finishedAt;
 
     @ManyToOne
     @JoinColumn(name = "loan_type_id")
     private LoanType loanType;
+
+
+    public void setInitialLoanState(LoanType type){
+        this.setLoanType(type);
+        this.setRemainingAmount(BigDecimal.ZERO);
+        this.setAmountPaid(BigDecimal.ZERO);
+        this.setInterest(BigDecimal.ZERO);
+    }
 
     public enum Status {
         PENDING,
@@ -55,5 +64,4 @@ public class Loan {
         IN_PAYMENT,
         FINISHED
     }
-
 }

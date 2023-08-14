@@ -1,0 +1,1 @@
+ALTER TABLE loan ADD COLUMN amount_paid decimal(12, 2) not null;
