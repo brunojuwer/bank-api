@@ -1,12 +1,10 @@
 package br.com.juwer.bankapi.api.controller;
 
 import br.com.juwer.bankapi.api.dto.assembler.AccountAssembler;
-import br.com.juwer.bankapi.api.dto.assembler.AccountDTOResumeAssembler;
 import br.com.juwer.bankapi.api.dto.assembler.AccountDisassembler;
 import br.com.juwer.bankapi.api.dto.input.AccountInput;
 import br.com.juwer.bankapi.api.dto.input.AccountInputPassword;
 import br.com.juwer.bankapi.api.dto.output.AccountDTO;
-import br.com.juwer.bankapi.api.dto.output.AccountDTOResume;
 import br.com.juwer.bankapi.config.security.verification.CheckSecurity;
 import br.com.juwer.bankapi.domain.model.Account;
 import br.com.juwer.bankapi.domain.projections.AccountResume;
@@ -26,7 +24,7 @@ public class AccountController {
     private final AccountDisassembler accountDisassembler;
 
     @GetMapping(value = "/{accountCode}", params = "projection=resume")
-    @CheckSecurity.Accounts.OwsAccount
+    @CheckSecurity.Accounts.OwnsAccount
     public AccountResume findResumedAccount(@PathVariable String accountCode) {
         return accountService.findResumeByCode(accountCode);
     }
@@ -45,7 +43,7 @@ public class AccountController {
 
     @PutMapping("/{accountCode}/password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CheckSecurity.Accounts.OwsAccount
+    @CheckSecurity.Accounts.OwnsAccount
     public void updatePassword(
             @PathVariable String accountCode,
             @Valid @RequestBody AccountInputPassword accountInputPassword
