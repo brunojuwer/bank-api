@@ -18,8 +18,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/v1/accounts/{accountCode}/transaction")
+@RequestMapping("/v1/accounts/{accountCode}/transactions")
 @RequiredArgsConstructor
 public class AccountTransactionController {
 
@@ -37,5 +39,11 @@ public class AccountTransactionController {
         Transaction transaction = transactionDisassembler.toDomainModel(transactionDTOInput);
         accountTransactionService.depositOrWithdraw(accountCode, transaction);
         return transactionAssembler.toModel(transaction);
+    }
+
+    @GetMapping
+    @CheckSecurity.Accounts.OwnsAccount
+    public List<TransactionDTO> findAll(@PathVariable String accountCode){
+        return transactionAssembler.toCollectionModel(accountTransactionService.findAll(accountCode));
     }
 }

@@ -27,7 +27,7 @@ public @interface CheckSecurity {
         @PreAuthorize("@securityUtils.verifyIfAccountMatches(#accountCode)")
         @Retention(RUNTIME)
         @Target(METHOD)
-        @interface OwsAccount {}
+        @interface OwnsAccount {}
     }
 
     @interface Customers {
