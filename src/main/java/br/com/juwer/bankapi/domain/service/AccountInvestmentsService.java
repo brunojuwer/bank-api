@@ -7,6 +7,7 @@ import br.com.juwer.bankapi.domain.exceptions.InvalidTransactionException;
 import br.com.juwer.bankapi.domain.model.*;
 import br.com.juwer.bankapi.domain.projections.AccountInvestmentResume;
 import br.com.juwer.bankapi.domain.repository.AccountInvestmentsRepository;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -114,7 +115,7 @@ public class AccountInvestmentsService {
         return investmentAc.orElseGet(AccountInvestments::new);
     }
 
-    private boolean isReclaimValueMoreThanInvestmentHave(BigDecimal amount, AccountInvestments investment) {
+    private boolean isReclaimValueMoreThanInvestmentHave(BigDecimal amount, @NotNull AccountInvestments investment) {
         return investment.getTotalBalance().compareTo(amount) < 0;
     }
 
