@@ -38,5 +38,4 @@ public class AccountTransactionController {
         accountTransactionService.depositOrWithdraw(accountCode, transaction);
         return transactionAssembler.toModel(transaction);
     }
-
 }
