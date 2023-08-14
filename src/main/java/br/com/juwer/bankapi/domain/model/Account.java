@@ -102,6 +102,10 @@ public class Account implements UserDetails {
         this.balance = this.balance.add(amount);
     }
 
+    public void addLoan(Loan loan) {
+        this.loans.add(loan);
+    }
+
     @Getter
     public enum Type {
         PF, PJ

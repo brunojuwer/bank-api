@@ -1,0 +1,1 @@
+ALTER TABLE loan RENAME COLUMN total_amount TO required_amount;

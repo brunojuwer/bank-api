@@ -14,7 +14,7 @@ public class LoanDTO {
 
     private Long id;
 
-    private BigDecimal totalAmount;
+    private BigDecimal requiredAmount;
 
     private BigDecimal remainingAmount;
 
