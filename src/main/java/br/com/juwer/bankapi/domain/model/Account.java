@@ -106,6 +106,21 @@ public class Account implements UserDetails {
         this.loans.add(loan);
     }
 
+    private List<Loan> loansPayDay() {
+        return this.loans.stream()
+                .filter(Loan::isInstallmentPayday)
+                .toList();
+    }
+
+    public void payLoan() {
+        if(!this.loansPayDay().isEmpty()){
+            this.loansPayDay().forEach(loan -> {
+                this.subtractBalance(loan.getInstallmentsValue());
+                loan.payInstallmet();
+            });
+        }
+    }
+
     @Getter
     public enum Type {
         PF, PJ

@@ -22,6 +22,12 @@ public class LoanDTO {
 
     private BigDecimal interest;
 
+    private int installments;
+
+    private BigDecimal installmentsValue;
+
+    private int installmentsDueDay;
+
     private String description;
 
     private LoanType loanType;
