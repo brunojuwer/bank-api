@@ -4,6 +4,7 @@ import br.com.juwer.bankapi.api.dto.input.AccountInputPassword;
 import br.com.juwer.bankapi.domain.exceptions.AccountNotFoundException;
 import br.com.juwer.bankapi.domain.exceptions.CurrentPasswordDoesNotMatchException;
 import br.com.juwer.bankapi.domain.model.Account;
+import br.com.juwer.bankapi.domain.model.Transaction;
 import br.com.juwer.bankapi.domain.projections.AccountResume;
 import br.com.juwer.bankapi.domain.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +21,7 @@ public class AccountService {
 
     private final AccountRepository repository;
     private final CustomerService customerService;
+    private final TransactionService transactionService;
     private final PasswordEncoder encoder;
 
     @Transactional
@@ -49,6 +52,14 @@ public class AccountService {
     public void updateLastLoginDate(Account account) {
         account.setLastLoginDate(OffsetDateTime.now());
         repository.save(account);
+    }
+
+    @Transactional
+    public void payLoans(){
+        List<Account> allAccountsWithLoans = repository.findAllWithLoans();
+        allAccountsWithLoans.forEach(Account::payLoan);
+        repository.saveAll(allAccountsWithLoans);
+//        transactionService.save(transaction);
     }
 
     public Account findByCode(String accountCode) {

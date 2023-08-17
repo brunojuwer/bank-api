@@ -1,5 +1,6 @@
 package br.com.juwer.bankapi.domain.service;
 
+import br.com.juwer.bankapi.api.dto.input.LoanPaymentInput;
 import br.com.juwer.bankapi.domain.exceptions.AccountNotFoundException;
 import br.com.juwer.bankapi.domain.exceptions.LoanNotFoundException;
 import br.com.juwer.bankapi.domain.model.Loan;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
@@ -55,7 +57,16 @@ public class LoanService {
 
     public void denyLoan(Long loanId) {
         Loan loan = findById(loanId);
-        loan.setStatus(Loan.Status.DENIED);
+        loan.deny();
+        loan.setFinishedAt(OffsetDateTime.now());
+        this.update(loan);
+    }
+
+    @Transactional
+    public void approveLoan(Long loanId, LoanPaymentInput loanPaymentInput) {
+        Loan loan = findById(loanId);
+        loan.approve();
+        loan.setLoanPaymentDetails(loanPaymentInput);
         this.update(loan);
     }
 }

@@ -41,6 +41,7 @@ public class Transaction {
         WITHDRAW,
         TRANSFER,
         APPLICATION,
+        INSTALLMENT_PAYMENT,
         RECLAIM,
         PIX
     }
