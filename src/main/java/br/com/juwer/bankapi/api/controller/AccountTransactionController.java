@@ -1,21 +1,15 @@
 package br.com.juwer.bankapi.api.controller;
 
 import br.com.juwer.bankapi.api.dto.assembler.TransactionAssembler;
-import br.com.juwer.bankapi.api.dto.disassembler.TransactionDisassembler;
-import br.com.juwer.bankapi.api.dto.input.TransactionDTOInput;
 import br.com.juwer.bankapi.api.dto.output.TransactionDTO;
+import br.com.juwer.bankapi.api.dto.request.DepositRequest;
+import br.com.juwer.bankapi.api.dto.request.WithdrawRequest;
 import br.com.juwer.bankapi.config.security.verification.CheckSecurity;
-import br.com.juwer.bankapi.domain.exceptions.SecurityValidationAccountException;
-import br.com.juwer.bankapi.domain.model.Account;
 import br.com.juwer.bankapi.domain.model.Transaction;
-import br.com.juwer.bankapi.domain.model.Customer;
-import br.com.juwer.bankapi.domain.service.AccountService;
 import br.com.juwer.bankapi.domain.service.AccountTransactionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,18 +20,27 @@ import java.util.List;
 public class AccountTransactionController {
 
     private final AccountTransactionService accountTransactionService;
-    private final TransactionDisassembler transactionDisassembler;
     private final TransactionAssembler transactionAssembler;
 
-    @PutMapping
+    @PutMapping("/deposit")
     @ResponseStatus(HttpStatus.CREATED)
     @CheckSecurity.Accounts.CanMakeTransfer
-    public TransactionDTO depositOrWithdraw(
+    public TransactionDTO deposit(
             @PathVariable String accountCode,
-            @RequestBody @Valid TransactionDTOInput transactionDTOInput
+            @RequestBody @Valid DepositRequest depositRequest
     ) {
-        Transaction transaction = transactionDisassembler.toDomainModel(transactionDTOInput);
-        accountTransactionService.depositOrWithdraw(accountCode, transaction);
+        Transaction transaction = accountTransactionService.deposit(accountCode, depositRequest.getAmount());
+        return transactionAssembler.toModel(transaction);
+    }
+
+    @PutMapping("/withdraw")
+    @ResponseStatus(HttpStatus.CREATED)
+    @CheckSecurity.Accounts.CanMakeTransfer
+    public TransactionDTO withdraw(
+            @PathVariable String accountCode,
+            @RequestBody @Valid WithdrawRequest withdrawRequest
+    ) {
+        Transaction transaction = accountTransactionService.withdraw(accountCode, withdrawRequest.getAmount());
         return transactionAssembler.toModel(transaction);
     }
 

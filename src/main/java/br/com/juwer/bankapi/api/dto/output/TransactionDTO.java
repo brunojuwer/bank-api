@@ -13,6 +13,7 @@ public class TransactionDTO {
     private Long transactionId;
     private String accountCode;
     private BigDecimal amount;
+    private String product;
     private Operation operation;
     private OffsetDateTime createdAt;
 }

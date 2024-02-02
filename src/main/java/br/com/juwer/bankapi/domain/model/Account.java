@@ -77,18 +77,12 @@ public class Account implements UserDetails {
     }
 
 
-    public void depositOrWithDraw(BigDecimal amount, Operation operation) {
-        boolean isADeposit = operation.equals(Operation.DEPOSIT);
-        boolean isAWithDraw = operation.equals(Operation.WITHDRAW);
+    public void deposit(BigDecimal amount) {
+        this.addToBalance(amount);
+    }
 
-        if(isADeposit) {
-            this.addToBalance(amount);
-        }
-        else if(isAWithDraw) {
-            this.subtractBalance(amount);
-        } else {
-            throw new InvalidTransactionException("Invalid value for a " + operation + " operation");
-        }
+    public void withdraw(BigDecimal amount) {
+        this.subtractBalance(amount);
     }
 
     public void subtractBalance(BigDecimal amount) {

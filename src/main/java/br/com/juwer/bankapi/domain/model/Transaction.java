@@ -35,6 +35,14 @@ public class Transaction {
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
 
+    public Transaction getNewInstance(String product, String accountCode, BigDecimal amount, Operation operation) {
+        this.setProduct(product);
+        this.setAmount(amount);
+        this.setAccountCode(accountCode);
+        this.setOperation(operation);
+        return this;
+    }
+
     @Getter
     public enum Operation {
         DEPOSIT,

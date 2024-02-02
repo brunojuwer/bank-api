@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -22,12 +23,27 @@ public class AccountTransactionService {
 
 
     @Transactional
-    public Transaction depositOrWithdraw(String accountCode, Transaction transaction) {
+    public Transaction deposit(String accountCode, BigDecimal amount) {
         Account account = accountService.findByCode(accountCode);
-        account.depositOrWithDraw(transaction.getAmount(), transaction.getOperation());
+        account.deposit(amount);
 
-        transaction.setProduct("CURRENT_ACCOUNT");
-        transaction.setAccountCode(accountCode);
+        Transaction transaction = new Transaction()
+                .getNewInstance("CURRENT_ACCOUNT", accountCode, amount, Transaction.Operation.DEPOSIT);
+
+        Transaction savedTransaction = transactionService.save(transaction);
+        accountRepository.populateAccountTransactionTable(account.getCode(), transaction.getId());
+        accountService.update(account);
+
+        return savedTransaction;
+    }
+
+    @Transactional
+    public Transaction withdraw(String accountCode, BigDecimal amount) {
+        Account account = accountService.findByCode(accountCode);
+        account.withdraw(amount);
+        Transaction transaction = new Transaction()
+                .getNewInstance("CURRENT_ACCOUNT", accountCode, amount, Transaction.Operation.WITHDRAW);
+
         Transaction savedTransaction = transactionService.save(transaction);
         accountRepository.populateAccountTransactionTable(account.getCode(), transaction.getId());
         accountService.update(account);
